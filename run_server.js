@@ -1,13 +1,42 @@
 // Imports
-var http = require('http');
+const http = require('http'),
+    express = require('express');
+
 
 // Constants
 const SERVER_PORT = 3000;
- 
+
+
+// Create the app
+var app = express();
+
+
+// Set properties
+app.set('port', SERVER_PORT);
+
+
+// Handle get request on root
+app.get('/', (request, response) => {
+    response.send(`
+    <html>
+        <body>
+            <h1>Welcome to WatchDogZZ web service home!</h1>
+        </body>
+    </html>
+    `);
+});
+
+
+app.get('/list', (request, response) => {
+    response.send(`
+    <html>
+        Here is the list
+    </html>
+    `);
+});
+
 // Create the server
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end('<html><body><h1>Hello World</h1></body></html>');
-}).listen(SERVER_PORT);
- 
-console.log('Server running on port ' + SERVER_PORT);
+http.createServer(app).listen(app.get('port'), () => {
+    // Callback when the server is ready
+    console.log('Server listening on port ' + app.get('port'));
+})
