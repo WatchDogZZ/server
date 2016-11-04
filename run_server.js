@@ -2,6 +2,8 @@
 const http = require('http'),
     express = require('express');
 
+const service = require('./service_methods.js');
+
 
 // Constants
 const SERVER_PORT = 3000;
@@ -28,11 +30,7 @@ app.get('/', (request, response) => {
 
 
 app.get('/list', (request, response) => {
-    response.send(`
-    <html>
-        Here is the list
-    </html>
-    `);
+    response.send(service.getList());
 });
 
 // Create the server
