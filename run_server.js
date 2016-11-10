@@ -10,8 +10,8 @@ const http = require('http');
 const express = require('express');
 
 /// Service files imports
-const service = require('./service_methods.js');
-
+const service = require('./service.methods.js');
+const serviceEntities = require('./service.entities.js');
 
 /// Configuration constants
 const SERVER_PORT = 3000;

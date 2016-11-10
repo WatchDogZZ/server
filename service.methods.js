@@ -2,9 +2,7 @@
 
 var data = require('./data_stub.js');
 
-/// Default location for a user
-exports.defaultLocation = [0.0, 0.0, 0.0];
-
+var entities = require('./service.entities.js');
 
 // Methode exemple
 exports.getList = function () {
@@ -16,9 +14,11 @@ exports.getUsers = function() {
 }
 
 exports.addUser = function(name, position=defaultLocation) {
-    if(!data.users.include(name)) {
+    if (!data.users.include(name)) {
+        // Register the user
         data.users.push(name);
         
+        // Add the user in the list
         var newElt = {};
         newElt["name"] = name;
         newElt["position"] = position;
