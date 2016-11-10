@@ -3,9 +3,12 @@ language: node_js
 node_js:
     - "node"
 
-before_script:
+install: # Install the dev dependencies
+    - npm install -d
+
+before_script: # Run the server in background
     - npm start &
 
-after_script:
+after_script: # Stop the server launched
     - kill %1
 
