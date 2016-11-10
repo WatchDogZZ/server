@@ -2,6 +2,10 @@
 
 var data = require('./data_stub.js');
 
+/// Default location for a user
+exports.defaultLocation = [0.0, 0.0, 0.0];
+
+
 // Methode exemple
 exports.getList = function () {
     return data.list;
@@ -11,7 +15,7 @@ exports.getUsers = function() {
     return data.users;
 }
 
-exports.addUser = function(name, position=[0.0, 0.0]) {
+exports.addUser = function(name, position=defaultLocation) {
     if(!data.users.include(name)) {
         data.users.push(name);
         
@@ -23,6 +27,3 @@ exports.addUser = function(name, position=[0.0, 0.0]) {
     }
 
 }
-
-/// Default location for a user
-exports.defaultLocation = [0.0, 0.0];

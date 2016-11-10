@@ -4,7 +4,7 @@
   "description": "WatchDogZZ web service used to handle requests from the differents apps of the project",
   "main": "run_server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine",
     "start": "node run_server.js"
   },
   "repository": {
@@ -20,5 +20,8 @@
   "dependencies": {
     "express": "^4.14.0",
     "mongodb": "^2.2.11"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.2"
   }
 }

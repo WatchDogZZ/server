@@ -5,11 +5,11 @@
 exports.list = [
     {
         "name": "ben",
-        "position": [0.0, 0.0],
+        "position": [0.0, 0.0, 0.0],
     },
     {
         "name": "benji",
-        "position": [10.0, 10.0]
+        "position": [10.0, 10.0, 10.0]
     }
 ];
 
