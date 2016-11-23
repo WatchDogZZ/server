@@ -1,4 +1,6 @@
-// Testing the REST service
+// Testing the Service
+// All body returns are JSON
+// Sot the body must be a stringified JSON Object test, otherwise it may fail
 
 var request = require('request');
 
@@ -7,9 +9,11 @@ const SERVICE_URL = "http://localhost:3000";
 describe("Service", function () {
     it('should give the array of connected users', function (done) {
 
-        request(SERVICE_URL+"/who", function (error, response, body) {
+        request(SERVICE_URL+"/users", function (error, response, body) {
 
-            expect(body).toEqual(JSON.stringify(['ben', 'benji']));
+            expect(body).toEqual(
+                JSON.stringify( { 'users': ['ben', 'benji'] } )
+            );
 
             done();
         });
@@ -19,7 +23,10 @@ describe("Service", function () {
 
         request(SERVICE_URL+"/where/ben", function (error, response, body) {
            
-            expect(body).toEqual(JSON.stringify([0.0, 0.0, 0.0]));
+            expect(body).toEqual(
+                JSON.stringify( { 'position': [0.0, 0.0, 0.0] } )
+            
+            );
 
             done();
 

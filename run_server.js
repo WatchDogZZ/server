@@ -39,6 +39,17 @@ app.get('/', (request, response) => {
         </body>
     </html>
     `);
+
+    response.end();
+});
+
+// Middleware for each request
+// Adding header properties
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
 });
 
 // '/where/user'
@@ -46,30 +57,45 @@ app.get('/', (request, response) => {
 // of all connected users. If the user does not exist
 app.get('/where/:user?', (request, response) => {
 
+    var serviceList = service.getList();
+
     if(undefined !== request.params.user) {
 
-        var currentUser = service.getList().find( (el, idx, arr) => {
+        var currentUser = serviceList.find( (el, idx, arr) => {
             return el.name == request.params.user;
         });
 
-        if(undefined !== currentUser) {
-            response.send(currentUser.position);
+        if (undefined !== currentUser) {
+            response.send({
+                "position": currentUser.position
+            });
         } else {
-            response.send( service.defaultLocation );
+            response.send({
+                "position": service.defaultLocation
+            });
         }
 
     } else {
 
-        response.send( service.getList() );
+        response.send({
+            "list": serviceList
+        });
     }
 
     response.end();
 });
 
-// '/who'
+// '/users'
 // Return the list of all connected users
-app.get('/who', (request, response) => {
-    response.send(service.getUsers());
+app.get('/users', (request, response) => {
+    response.send({
+        "users": service.getUsers()
+    });
+    
+    response.end();
+
+    console.log(request.header("Origin", "Authorization"));
+
 });
 
 
