@@ -1,4 +1,6 @@
-const serviceEntities = require('../service.entities.js')
+// Testing the entities of the service
+
+const serviceEntities = require('../service.entities.js');
 
 describe("Service entities : User", function () {
 
@@ -55,7 +57,7 @@ describe("Service entities : User", function () {
 
     });
 
-    if ("should have the default location", function (done) {
+    it("should have the default location", function (done) {
 
         expect(anonymousUser.getLocation()).toEqual(defaultLocation);
 

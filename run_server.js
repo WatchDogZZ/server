@@ -94,8 +94,6 @@ app.get('/users', (request, response) => {
     
     response.end();
 
-    console.log(request.header("Origin", "Authorization"));
-
 });
 
 
