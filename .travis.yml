@@ -3,12 +3,20 @@ language: node_js
 node_js:
     - "node"
 
-install: # Install the dev dependencies
+before_install: # Install the dev dependencies
+    - sudo apt-get -qq update
+    - sudo apt-get install -y mongodb-org
+
+install:
     - npm install -d
 
 before_script: # Run the server in background
     - npm start &
+    - ./start_database.sh &
 
-after_script: # Stop the server launched
+script:
+    - npm test
+
+after_script: # Stop the server launched and the database
     - kill %1
-
+    - kill %2
