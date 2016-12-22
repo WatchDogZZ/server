@@ -8,9 +8,9 @@ exports.defaultLocation = [0.0, 0.0, 0.0];
  * @param {string} [name="John Doe"] The name
  * @param {array} [location=exports.defaultLocation] The longitude, latitude and elevation
  */
-function User(name = "John Doe", location = exports.defaultLocation) {
-    this.name = name;
-    this.location = location;
+function User(name, location) {
+    this.name = name || "John Doe";
+    this.location = location || [0.0, 0.0, 0.0];
 }
 
 /**
@@ -28,6 +28,15 @@ User.prototype.getName = function () {
 }
 
 /**
+ * Set the name of the user
+ *
+ * @param {string} name The new name
+ */
+User.prototype.setName = function (name) {
+    this.name = name;
+}
+
+/**
  * @returns the location of the entity
  */
 User.prototype.getLocation = function () {
@@ -38,7 +47,7 @@ User.prototype.getLocation = function () {
 /**
  * Change the location of a user
  * 
- * @param {any} locationArray An array containing the new location of the user
+ * @param {Array} locationArray An array containing the new location of the user
  */
 User.prototype.setLocation = function (locationArray) {
 
@@ -48,20 +57,6 @@ User.prototype.setLocation = function (locationArray) {
         this.location[2] = locationArray[2];
     }
 
-}
-
-/**
- * Change the location of the user
- * 
- * @param {any} longitude
- * @param {any} latitude
- * @param {any} elevation
- */
-User.prototype.setLocation = function (longitude, latitude, elevation) {
-
-    this.location[0] = longitude;
-    this.location[1] = latitude;
-    this.location[2] = elevation;
 }
 
 exports.User = User;

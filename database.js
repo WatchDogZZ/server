@@ -108,27 +108,6 @@ exports.deleteUser = function deleteUser(name) {
     performOperation(func);
 }
 
-// THIS FUNCTION DOES NOT WORK FFS !
-exports.updateUser = function updateUser(user) {
-    function func(db, callback) {
-        // TODO use the _id ?
-        replaceOne(db, USER_COLLECTION_NAME, { 'name': user.getName() }, user, callback);
-    }
-
-    performOperation(func);
-}
-
-exports.updateUserLocation = function updateUserLocation(name, location) {
-
-    function func(db, callback) {
-        updateOne(db, USER_COLLECTION_NAME, { 'name': name }, {
-            $set: { 'location': location }
-        }, callback);
-    }
-
-    performOperation(func);
-}
-
 // Add user in the database
 exports.createUser = function addUser(user) {
 
@@ -157,12 +136,9 @@ exports.updateUser = function (user) {
     
     var nameFilter = user.getName();
 
-    console.log("name filter");
-    console.log(nameFilter);
-
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).findOneAndUpdate({ 'name': user.getName() }, user);
+        db.collection(USER_COLLECTION_NAME).findOneAndReplace({ 'name': user.getName() }, user);
 
         db.close();
     });

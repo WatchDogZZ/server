@@ -53,43 +53,50 @@ describe('Mongo database', function () {
 
 
     it('should update the user location', function (done) {
-        /*
+        
         var newLo = 11.0;
         var newLa = 22.0;
         var newEl = 33.0;
 
         var loc = [newLo, newLa, newEl];
 
-        database.updateUserLocation(user1Name, loc);
-
+        // Get the user and update the location
         database.getUser(user1Name, (item) => {
-            var user = new serviceEntities.User(item);
 
-            expect(user.getLocation()[0]).toEqual(0);
-            expect(1).toEqual(0);
+            expect(item).not.toBeNull();
+
+            var userBefore = serviceEntities.loadUserFromMongoDocument(item);
+
+            expect(userBefore).not.toBeNull();
+
+            userBefore.setLocation(loc);
+
+            database.updateUser(userBefore);
         
             done();
         });
         
+        done();
 
-        database.getUser(user1Name, (val) => {
+        // Check if the modifications are ok        
+        database.getUser(user1Name, (item) => {
 
-            var user2 = serviceEntities.loadUserFromMongoDocument(val);
+            expect(item).not.toBeNull();
 
-            user2.getName();
+            var userAfter = serviceEntities.loadUserFromMongoDocument(item);
 
-            console.log(user2);
+            expect(userAfter).not.toBeNull();
 
-            // user2.setLocation(99, 99, 99);
+            console.log(userAfter);
 
-            // database.updateUser(user2);
+            expect(userAfter.getLocation()).toEqual(loc);
 
+        done();
         });
-        */
-            done();
+        
     });
 
-    
+
     it('should delete the user', function (done) {
 
         database.deleteUser(user1Name);
@@ -101,10 +108,6 @@ describe('Mongo database', function () {
 
         done();
     });
-    
-    // // Clear the base    
-    // MongoClient.connect(DATABASE_URL, (err, db) => {
-    //     db.collection('usersCollection').drop();
-    // });
+
 
 });
