@@ -18,7 +18,7 @@ var DATABASE_URL = 'mongodb://localhost:' + DATABASE_PORT + '/' + DATABASE_NAME;
 /**
  * Perform an operation on the database.
  * 
- * @param {any} func function taking the db connection and the callback.
+ * @param {function} func function taking the db connection and the callback.
  */
 function performOperation(func) {
     MongoClient.connect(DATABASE_URL, function (err, db) {
@@ -26,7 +26,7 @@ function performOperation(func) {
         func(db, function (err, result) {
             // general structure of the function to call
         });
-        
+
         db.close();
     });
 }
@@ -52,7 +52,7 @@ function insertOne(db, collectionName, obj, callback) {
  * @param {any} callback the callback invoked after find.
  */
 function findOne(db, collectionName, filter, callback) {
-    db.collection(collectionName).findOne(filter, (err, item) => {
+    db.collection(collectionName).findOne(filter, (item) => {
         callback(item);
     });
 }
@@ -67,6 +67,18 @@ function findOne(db, collectionName, filter, callback) {
  */
 function deleteOne(db, collectionName, filter, callback) {
     db.collection(collectionName).deleteOne(filter, callback);
+}
+
+function updateOne(db, collectionName, filter, update, callback) {
+    db.collection(collectionName).updateOne(filter, { $set: JSON.stringify(update) }, callback);
+}
+
+function replaceOne(db, collectionName, filter, replace, callback) {
+    db.collection(collectionName).findOneAndReplace(filter, replace, callback);
+}
+
+function updateOne(db, collectionName, filter, update, callback) {
+    db.collection(collectionName).findOneAndUpdate(filter, update, callback);
 }
 
 /**
@@ -85,38 +97,74 @@ exports.connect = function connect() {
 // Users manipulation functions
 /******************************************************************************/
 
-// Add user in the database
-exports.addUser = function addUser(user) {
-    function func(db, callback) {
-        insertOne(db, 'users', user, callback);
-    }
-    
-    performOperation(func);
-}
-
-// Get user from the database
-exports.getUser = function getUser(name, callback) {
-    function func(db, callback) {
-        findOne(db, 'users', { 'name': name }, callback);
-    }
-
-    performOperation(func);
-}
-
-// Update user in the database
-function updateUser(user) {
-
-}
+const USER_COLLECTION_NAME = 'usersCollection';
 
 // Delete user from the database
 exports.deleteUser = function deleteUser(name) {
+    function func(db, callback) {
+        deleteOne(db, USER_COLLECTION_NAME, { 'name': name }, callback);
+    }
 
     performOperation(func);
-
-
-    function func(db, callback) {
-        deleteOne(db, 'users', { 'name': name }, callback);
-
-    }    
 }
 
+// THIS FUNCTION DOES NOT WORK FFS !
+exports.updateUser = function updateUser(user) {
+    function func(db, callback) {
+        // TODO use the _id ?
+        replaceOne(db, USER_COLLECTION_NAME, { 'name': user.getName() }, user, callback);
+    }
+
+    performOperation(func);
+}
+
+exports.updateUserLocation = function updateUserLocation(name, location) {
+
+    function func(db, callback) {
+        updateOne(db, USER_COLLECTION_NAME, { 'name': name }, {
+            $set: { 'location': location }
+        }, callback);
+    }
+
+    performOperation(func);
+}
+
+// Add user in the database
+exports.createUser = function addUser(user) {
+
+    MongoClient.connect(DATABASE_URL, function (err, db) {
+
+        db.collection(USER_COLLECTION_NAME).insertOne(user);
+
+        db.close();
+    });
+}
+
+// Select a user using the name. Use the callbach with an argument : the user.
+exports.getUser = function (name, callback) {
+
+    MongoClient.connect(DATABASE_URL, function (err, db) {
+
+        db.collection(USER_COLLECTION_NAME).findOne({ 'name': name }, (err, val) => {
+            callback(val);
+        });
+
+        db.close();
+    });
+}
+
+exports.updateUser = function (user) {
+    
+    var nameFilter = user.getName();
+
+    console.log("name filter");
+    console.log(nameFilter);
+
+    MongoClient.connect(DATABASE_URL, function (err, db) {
+
+        db.collection(USER_COLLECTION_NAME).findOneAndUpdate({ 'name': user.getName() }, user);
+
+        db.close();
+    });
+
+}
