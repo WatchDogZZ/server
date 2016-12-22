@@ -74,13 +74,15 @@ describe('Mongo database', function () {
             database.updateUser(userBefore);
         
             done();
+            console.log(1);
         });
         
+        console.log(2);
         done();
 
         // Check if the modifications are ok        
         database.getUser(user1Name, (item) => {
-
+console.log(3);
             expect(item).not.toBeNull();
 
             var userAfter = serviceEntities.loadUserFromMongoDocument(item);
