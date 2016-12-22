@@ -1,5 +1,6 @@
+// Service entities
 
-
+exports.defaultName = "John Doe";
 exports.defaultLocation = [0.0, 0.0, 0.0];
 
 /**
@@ -8,9 +9,9 @@ exports.defaultLocation = [0.0, 0.0, 0.0];
  * @param {string} [name="John Doe"] The name
  * @param {array} [location=exports.defaultLocation] The longitude, latitude and elevation
  */
-function User(name, location) {
-    this.name = name || "John Doe";
-    this.location = location || [0.0, 0.0, 0.0];
+function User(name = exports.defaultName, location = exports.defaultLocation) {
+    this.name = name;
+    this.location = location;
 }
 
 /**

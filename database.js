@@ -100,20 +100,25 @@ exports.connect = function connect() {
 const USER_COLLECTION_NAME = 'usersCollection';
 
 // Delete user from the database
-exports.deleteUser = function deleteUser(name) {
-    function func(db, callback) {
-        deleteOne(db, USER_COLLECTION_NAME, { 'name': name }, callback);
-    }
+exports.deleteUser = function deleteUser(name, callback) {
+    MongoClient.connect(DATABASE_URL, function (err, db) {
 
-    performOperation(func);
+        db.collection(USER_COLLECTION_NAME).deleteOne({'name' : name}, (err, res) => {
+            callback(err, res);
+        });
+
+        db.close();
+    });
 }
 
 // Add user in the database
-exports.createUser = function addUser(user) {
+exports.createUser = function addUser(user, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).insertOne(user);
+        db.collection(USER_COLLECTION_NAME).insertOne(user, (err, res) => {
+            callback(err, res);
+        });
 
         db.close();
     });
@@ -124,21 +129,23 @@ exports.getUser = function (name, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).findOne({ 'name': name }, (err, val) => {
-            callback(val);
+        db.collection(USER_COLLECTION_NAME).findOne({ 'name': name }, (err, res) => {
+            callback(err, res);
         });
 
         db.close();
     });
 }
 
-exports.updateUser = function (user) {
+exports.updateUser = function (user, callback) {
     
     var nameFilter = user.getName();
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).findOneAndReplace({ 'name': user.getName() }, user);
+        db.collection(USER_COLLECTION_NAME).findOneAndReplace({ 'name': user.getName() }, user, (err, res) => {
+            callback(err, res);
+        });
 
         db.close();
     });
