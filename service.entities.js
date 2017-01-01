@@ -4,10 +4,7 @@ exports.defaultName = "John Doe";
 exports.defaultLocation = [0.0, 0.0, 0.0];
 
 /**
- * 
- * Create a new user
- * @param {string} [name="John Doe"] The name
- * @param {array} [location=exports.defaultLocation] The longitude, latitude and elevation
+ * @class
  */
 function User(name = exports.defaultName, location = exports.defaultLocation) {
     this.name = name;

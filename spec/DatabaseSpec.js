@@ -163,8 +163,7 @@ describe('Mongo database', function () {
             expect(userList).toContain(user3);
             expect(userList).toContain(user4);
             expect(userList).toContain(user5);
-/*
-*/
+
             done();            
 
         });
@@ -194,7 +193,7 @@ describe('Mongo database', function () {
     });
 
     it('should delete all the users', function (done) {
-        
+
         database.deleteUser(user2Name, (err, res) => { expect(err).toBeNull(); done(); });
         database.deleteUser(user3Name, (err, res) => { expect(err).toBeNull(); done(); });
         database.deleteUser(user4Name, (err, res) => { expect(err).toBeNull(); done(); });
