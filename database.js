@@ -40,7 +40,7 @@ const USER_COLLECTION_NAME = 'usersCollection';
 exports.deleteUser = function deleteUser(name, callback) {
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).deleteOne({'name' : name}, (err, res) => {
+        db.collection(USER_COLLECTION_NAME).deleteOne({ 'name': name }, (err, res) => {
             callback(err, res);
         });
 
@@ -101,13 +101,13 @@ exports.getUser = function (name, callback) {
  *     - err : The error of the request, null id there is no error
  *     - res : the list of string containing the usernames
  */
-exports.getUserList = function (callback) {
-    
+exports.getUsernameList = function (callback) {
+
     MongoClient.connect(DATABASE_URL, function (err, db) {
-        
+
         db.collection(USER_COLLECTION_NAME).find().project({ _id: 0, name: 1 }).toArray((err, item) => {
 
-            var nameArray = []
+            var nameArray = [];
 
             if (null != item) {
                 item.forEach((val, idx, arr) => {
@@ -120,7 +120,40 @@ exports.getUserList = function (callback) {
         });
 
         db.close();
-        
+
+    });
+
+}
+
+/**
+ * Get the positions of each User.
+ *
+ * @param {function} callback The callback taking the following parameters
+ *     - err : The error of the request, null id there is no error
+ *     - res : a list containing User instances
+ */
+exports.getUserList = function (callback) {
+
+    MongoClient.connect(DATABASE_URL, function (err, db) {
+
+        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0 }).toArray((err, item) => {
+
+            var userArray = [];
+
+            if (null != item) {
+                item.forEach((val, idx, arr) => {
+                    if (val != null) {
+                        userArray.push(serviceEntities.loadUserFromMongoDocument(val));
+                    }
+                });
+            }
+
+            callback(err, userArray);
+        });
+
+
+        db.close();
+
     });
 
 }
@@ -134,7 +167,7 @@ exports.getUserList = function (callback) {
  *     - res : the result of th request
  */
 exports.updateUser = function (user, callback) {
-    
+
     var nameFilter = user.getName();
 
     MongoClient.connect(DATABASE_URL, function (err, db) {

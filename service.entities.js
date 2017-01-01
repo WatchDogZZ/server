@@ -16,12 +16,30 @@ function User(name = exports.defaultName, location = exports.defaultLocation) {
 
 /**
  * Create a user according to data stored in a MongoDB document
+ * @param {MongoDB.Document} obj The MongoDB document containing the information of the User
+ * @return {User} A new instance of a user with the information of obj
  */
 exports.loadUserFromMongoDocument = function (obj) {
-    return new User(obj['name'], obj['location']);
+    // A new user with default values
+    var user = new User();
+
+    if (null != obj) {
+
+        // Copying each attribute contained in the document
+        for (var att in obj) {
+
+            // Copy all attributes BUT _id
+            if (obj.hasOwnProperty(att) && '_id' != att) {
+                user[att] = obj[att];
+            }
+        }
+    }
+
+    return user;
 }
 
 /**
+ * Get the name of the User
  * @returns the name of the entity
  */
 User.prototype.getName = function () {
