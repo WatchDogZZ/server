@@ -7,10 +7,9 @@ const serviceEntities = require('../service.entities');
 
 
 // Global data for testing
-var DATABASE_NAME = 'watchdogzz';
-var DATABASE_PORT = 27017;
-var DATABASE_URL = 'mongodb://localhost:' + DATABASE_PORT + '/' + DATABASE_NAME;
-
+database.DATABASE_NAME = 'watchdogzztest';
+database.DATABASE_PORT = 27017;
+database.DATABASE_URL = 'mongodb://localhost:' + database.DATABASE_PORT + '/' + database.DATABASE_NAME;
 
 describe('Mongo database', function () {
 
@@ -96,7 +95,51 @@ describe('Mongo database', function () {
     });
 
 
-    it('should delete the user', function (done) {
+
+    const user2Name = 'Testeur2';
+    const user2Location = [20.0, 20.0, 20.0];
+    const user3Name = 'Testeur3';
+    const user3Location = [30.0, 30.0, 30.0];
+    const user4Name = 'Testeur4';
+    const user4Location = [40.0, 40.0, 40.0];
+    const user5Name = 'Testeur5';
+    const user5Location = [50.0, 50.0, 50.0];
+
+    it('should add a bunch of users', function (done) {
+        
+        var user2 = new serviceEntities.User(user2Name, user2Location);
+        var user3 = new serviceEntities.User(user3Name, user3Location);
+        var user4 = new serviceEntities.User(user4Name, user4Location);
+        var user5 = new serviceEntities.User(user5Name, user5Location);
+
+        database.createUser(user2, (err, res) => { expect(err).toBeNull(); done(); });
+        database.createUser(user3, (err, res) => { expect(err).toBeNull(); done(); });
+        database.createUser(user4, (err, res) => { expect(err).toBeNull(); done(); });
+        database.createUser(user5, (err, res) => { expect(err).toBeNull(); done(); });
+
+    });
+
+    it('should retrieve the name of the Users in the database', function (done) {
+
+        database.getUserList((err, item) => {
+            expect(err).toBeNull();
+
+            // Do we have 5 usernames            
+            expect(item.length).toEqual(5);
+
+            // Do we have each username added            
+            expect(item).toContain(user1Name);
+            expect(item).toContain(user2Name);
+            expect(item).toContain(user3Name);
+            expect(item).toContain(user4Name);
+            expect(item).toContain(user5Name);
+
+            done();
+        });
+
+    });
+
+    it('should delete the user 1', function (done) {
 
         database.deleteUser(user1Name, (err, res) => {
             expect(err).toBeNull();
@@ -106,9 +149,9 @@ describe('Mongo database', function () {
     });
 
 
-    it('should check that the user is deleted', function(done) {
+    it('should check that the user 1 is deleted', function(done) {
         database.getUser(user1Name, (err, item) => {
-            
+
             expect(err).toBeNull();
             expect(item).toBeNull();
 
@@ -117,5 +160,13 @@ describe('Mongo database', function () {
 
     });
 
+    it('should delete all the users', function (done) {
+        
+        database.deleteUser(user2Name, (err, res) => { expect(err).toBeNull(); done(); });
+        database.deleteUser(user3Name, (err, res) => { expect(err).toBeNull(); done(); });
+        database.deleteUser(user4Name, (err, res) => { expect(err).toBeNull(); done(); });
+        database.deleteUser(user5Name, (err, res) => { expect(err).toBeNull(); done(); });
+
+    });
 
 });

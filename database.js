@@ -11,76 +11,6 @@ var DATABASE_PORT = 27017;
 var DATABASE_URL = 'mongodb://localhost:' + DATABASE_PORT + '/' + DATABASE_NAME;
 
 
-/******************************************************************************/
-// General functions on the Database
-/******************************************************************************/
-
-/**
- * Perform an operation on the database.
- * 
- * @param {function} func function taking the db connection and the callback.
- */
-function performOperation(func) {
-    MongoClient.connect(DATABASE_URL, function (err, db) {
-
-        func(db, function (err, result) {
-            // general structure of the function to call
-        });
-
-        db.close();
-    });
-}
-
-/**
- * Insert an object in the Database.
- * 
- * @param {any} db the connection on the database.
- * @param {any} collectionName the collection name to insert in.
- * @param {any} obj the object to insert in the collection.
- * @param {any} callback the callback invoked after the insert.
- */
-function insertOne(db, collectionName, obj, callback) {
-    db.collection(collectionName).insertOne(obj, callback);
-}
-
-/**
- * Find an object stored in the database.
- * 
- * @param {any} db the connection on the database.
- * @param {any} collectionName the collection name to look in.
- * @param {any} filter the filter object to find the object.
- * @param {any} callback the callback invoked after find.
- */
-function findOne(db, collectionName, filter, callback) {
-    db.collection(collectionName).findOne(filter, (item) => {
-        callback(item);
-    });
-}
-
-/**
- * Delete an object using a filter.
- * 
- * @param {any} db
- * @param {any} collectionName
- * @param {any} filter
- * @param {any} callback
- */
-function deleteOne(db, collectionName, filter, callback) {
-    db.collection(collectionName).deleteOne(filter, callback);
-}
-
-function updateOne(db, collectionName, filter, update, callback) {
-    db.collection(collectionName).updateOne(filter, { $set: JSON.stringify(update) }, callback);
-}
-
-function replaceOne(db, collectionName, filter, replace, callback) {
-    db.collection(collectionName).findOneAndReplace(filter, replace, callback);
-}
-
-function updateOne(db, collectionName, filter, update, callback) {
-    db.collection(collectionName).findOneAndUpdate(filter, update, callback);
-}
-
 /**
  * Establish the connection on the database and close it immediately.
  */
@@ -99,7 +29,14 @@ exports.connect = function connect() {
 
 const USER_COLLECTION_NAME = 'usersCollection';
 
-// Delete user from the database
+/**
+ * Delete the user matching a username.
+ *
+ * @param {string} name The name of the user to delete.
+ * @param {function} callback The callback taking the following parameters
+ *     - err : The error of the request, null id there is no error
+ *     - res : the result of th request
+ */
 exports.deleteUser = function deleteUser(name, callback) {
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
@@ -111,7 +48,14 @@ exports.deleteUser = function deleteUser(name, callback) {
     });
 }
 
-// Add user in the database
+/**
+ * Create a new User in the database.
+ *
+ * @param {User} user The User instance to add in the database.
+ * @param {function} callback The callback taking the following parameters
+ *     - err : The error of the request, null id there is no error
+ *     - res : the result of th request
+ */
 exports.createUser = function addUser(user, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
@@ -150,6 +94,45 @@ exports.getUser = function (name, callback) {
     });
 }
 
+/**
+ * Get the username list of connected users.
+ *
+ * @param {function} callback The callback taking the following parameters
+ *     - err : The error of the request, null id there is no error
+ *     - res : the list of string containing the usernames
+ */
+exports.getUserList = function (callback) {
+    
+    MongoClient.connect(DATABASE_URL, function (err, db) {
+        
+        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0, name: 1 }).toArray((err, item) => {
+
+            var nameArray = []
+
+            if (null != item) {
+                item.forEach((val, idx, arr) => {
+                    nameArray.push(val['name']);
+                });
+            }
+
+
+            callback(err, nameArray);
+        });
+
+        db.close();
+        
+    });
+
+}
+
+/**
+ * Update the User information.
+ *
+ * @param {User} user The user object with updated information.
+ * @param {function} callback The callback taking the following parameters
+ *     - err : The error of the request, null id there is no error
+ *     - res : the result of th request
+ */
 exports.updateUser = function (user, callback) {
     
     var nameFilter = user.getName();
