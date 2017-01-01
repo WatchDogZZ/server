@@ -124,12 +124,25 @@ exports.createUser = function addUser(user, callback) {
     });
 }
 
-// Select a user using the name. Use the callbach with an argument : the user.
+/**
+ * Get a user using the username to select it.
+ *
+ * @param {string} name The name of the user to select.
+ * @param {function} callback The callback taking the following parameters
+ *     - err : The error of the request, null id there is no error
+ *     - res : the User entity retrived, null if the user is not found
+ */
 exports.getUser = function (name, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
         db.collection(USER_COLLECTION_NAME).findOne({ 'name': name }, (err, res) => {
+
+            if (null != res) {
+                // If we have a result, load a User entity
+                res = serviceEntities.loadUserFromMongoDocument(res);
+            }
+
             callback(err, res);
         });
 

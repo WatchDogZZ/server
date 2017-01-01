@@ -29,6 +29,8 @@ describe('Mongo database', function () {
         var user1 = new serviceEntities.User(user1Name, user1Location);
 
         database.createUser(user1, (err, res) => {
+            expect(err).toBeNull();
+
             done();
         });
     });
@@ -39,13 +41,11 @@ describe('Mongo database', function () {
         // Get the user and test it in the callback        
         database.getUser(user1Name, (err, item) => {
 
-            // Instance of a user to use the methods after            
-            var user = serviceEntities.loadUserFromMongoDocument(item);
-            
-            expect(user).not.toBeNull();
+            expect(err).toBeNull();
+            expect(item).not.toBeNull();
 
-            expect(user.getName(), user1Name);
-            expect(user.getLocation(), user1Location);
+            expect(item.getName(), user1Name);
+            expect(item.getLocation(), user1Location);
 
             done();
         });
@@ -65,15 +65,14 @@ describe('Mongo database', function () {
         // Get the user and update the location
         database.getUser(user1Name, (err, item1) => {
 
+            expect(err).toBeNull();
             expect(item1).not.toBeNull();
 
-            var userBefore = serviceEntities.loadUserFromMongoDocument(item1);
+            item1.setLocation(loc);
 
-            expect(userBefore).not.toBeNull();
+            database.updateUser(item1, (err, res) => {
+                expect(err).toBeNull();
 
-            userBefore.setLocation(loc);
-
-            database.updateUser(userBefore, (err, res) => {
                 done();
             });
         
@@ -85,13 +84,11 @@ describe('Mongo database', function () {
     
         // Check if the modifications are ok        
         database.getUser(user1Name, (err, item2) => {
+
+            expect(err).toBeNull();
             expect(item2).not.toBeNull();
 
-            var userAfter = serviceEntities.loadUserFromMongoDocument(item2);
-
-            expect(userAfter).not.toBeNull();
-
-            expect(userAfter.getLocation()).toEqual(loc);
+            expect(item2.getLocation()).toEqual(loc);
 
         done();
         });
@@ -102,6 +99,8 @@ describe('Mongo database', function () {
     it('should delete the user', function (done) {
 
         database.deleteUser(user1Name, (err, res) => {
+            expect(err).toBeNull();
+
             done();
         });
     });
@@ -109,7 +108,8 @@ describe('Mongo database', function () {
 
     it('should check that the user is deleted', function(done) {
         database.getUser(user1Name, (err, item) => {
-
+            
+            expect(err).toBeNull();
             expect(item).toBeNull();
 
             done();
