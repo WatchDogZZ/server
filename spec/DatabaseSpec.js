@@ -19,7 +19,7 @@ describe('Mongo database', function () {
 
     });
 
-    
+
     const user1Name = 'Testeur1';
     const user1Location = [10.0, 10.0, 10.0];
     var user1 = new serviceEntities.User(user1Name, user1Location);
@@ -28,14 +28,14 @@ describe('Mongo database', function () {
 
         database.createUser(user1, (err, res) => {
             expect(err).toBeNull();
-            
+
             done();
         });
     });
 
 
     it('should retrieve the created user', function (done) {
-        
+
         // Get the user and test it in the callback        
         database.getUser(user1Name, (err, item) => {
 
@@ -47,7 +47,7 @@ describe('Mongo database', function () {
 
             done();
         });
-        
+
     });
 
 
@@ -58,7 +58,7 @@ describe('Mongo database', function () {
     var loc = [newLo, newLa, newEl];
 
     it('should update the user location', function (done) {
-        
+
 
         // Get the user and update the location
         database.getUser(user1Name, (err, item1) => {
@@ -74,13 +74,13 @@ describe('Mongo database', function () {
 
                 done();
             });
-        
+
         });
-        
+
     });
 
     it('should match the location updated value', function (done) {
-    
+
         // Check if the modifications are ok        
         database.getUser(user1Name, (err, item2) => {
 
@@ -89,9 +89,9 @@ describe('Mongo database', function () {
 
             expect(item2.getLocation()).toEqual(loc);
 
-        done();
+            done();
         });
-        
+
     });
 
 
@@ -115,10 +115,19 @@ describe('Mongo database', function () {
 
     it('should add a bunch of users', function (done) {
 
-        database.createUser(user2, (err, res) => { expect(err).toBeNull(); done(); });
-        database.createUser(user3, (err, res) => { expect(err).toBeNull(); done(); });
-        database.createUser(user4, (err, res) => { expect(err).toBeNull(); done(); });
-        database.createUser(user5, (err, res) => { expect(err).toBeNull(); done(); });
+        database.createUser(user2, (err, res) => {
+            expect(err).toBeNull();
+        });
+        database.createUser(user3, (err, res) => {
+            expect(err).toBeNull();
+        });
+        database.createUser(user4, (err, res) => {
+            expect(err).toBeNull();
+        });
+        database.createUser(user5, (err, res) => {
+            expect(err).toBeNull();
+            done();
+        });
 
     });
 
@@ -143,7 +152,7 @@ describe('Mongo database', function () {
     });
 
     it('should return all users with their attributes', function (done) {
-        
+
         // Deleting the _id properties of users
         delete user1['_id'];
         delete user2['_id'];
@@ -152,7 +161,7 @@ describe('Mongo database', function () {
         delete user5['_id'];
 
         database.getUserList((err, userList) => {
-            
+
             expect(err).toBeNull();
             expect(userList).not.toBeNull();
 
@@ -164,12 +173,12 @@ describe('Mongo database', function () {
             expect(userList).toContain(user4);
             expect(userList).toContain(user5);
 
-            done();            
+            done();
 
         });
 
     });
-    
+
 
     it('should delete the user 1', function (done) {
 
@@ -181,7 +190,7 @@ describe('Mongo database', function () {
     });
 
 
-    it('should check that the user 1 is deleted', function(done) {
+    it('should check that the user 1 is deleted', function (done) {
         database.getUser(user1Name, (err, item) => {
 
             expect(err).toBeNull();
