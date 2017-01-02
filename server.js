@@ -14,7 +14,7 @@ const service = require('./service.methods.js');
 const serviceEntities = require('./service.entities.js');
 
 /// Configuration constants
-const SERVER_PORT = process.env.PORT || 3000;
+const SERVER_PORT = process.env.PORT || 80;
 
 
 /// Create the app

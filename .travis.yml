@@ -20,3 +20,11 @@ script:
 after_script: # Stop the server launched and the database
     - kill %1
     - kill %2
+
+#deployment on aws opsworks
+deploy:
+    - provider: opsworks
+    - access-key-id: ACCESS-KEY-ID
+    - secret-access-key: SECRET-ACCESS-KEY
+    - app-id: APP-ID
+

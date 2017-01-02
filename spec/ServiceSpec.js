@@ -4,7 +4,7 @@
 
 var request = require('request');
 
-const SERVICE_PORT = process.env.PORT || 3000;
+const SERVICE_PORT = process.env.PORT || 80;
 const SERVICE_URL = "http://localhost:" + SERVICE_PORT;
 
 describe("Service", function () {
