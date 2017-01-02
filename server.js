@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * @file run_server.js
  * @author Benjamin Barbesange && Benoît Garçon
