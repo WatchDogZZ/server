@@ -4,18 +4,14 @@ const serviceEntities = require('../service.entities.js');
 
 describe("Service entities : User", function () {
 
-    var name = "ben";
-    var position = [0.0, 0.0, 0.0];
+    var nameBen = "ben";
+    var positionBen = [0.0, 0.0, 0.0];
 
-    var benUser;
+    var benUser = new serviceEntities.User(nameBen, positionBen);
 
-    it("should create a new user", function (done) {
-
-        benUser = new serviceEntities.User(name, position);
-
-        expect(benUser.getName()).toEqual(name);
-
-        expect(benUser.getLocation()).toEqual(position);
+    it("should be allocated", function (done) {
+        
+        expect(benUser).not.toBeNull();
 
         done();
 
@@ -23,7 +19,7 @@ describe("Service entities : User", function () {
 
     it("should get the name", function (done) {
 
-        expect(benUser.getName()).toEqual(name);
+        expect(benUser.getName()).toEqual(nameBen);
 
         done();
 
@@ -31,7 +27,7 @@ describe("Service entities : User", function () {
 
     it("should get the location", function (done) {
 
-        expect(benUser.getLocation()).toEqual(position);
+        expect(benUser.getLocation()).toEqual(positionBen);
 
         done();
 
@@ -39,11 +35,12 @@ describe("Service entities : User", function () {
 
     var defaultName = "John Doe";
     var defaultLocation = [0.0, 0.0, 0.0];
-    var anonymousUser;
 
-    it("should create an anonymous user", function (done) {
+    var anonymousUser = new serviceEntities.User();
 
-        anonymousUser = new serviceEntities.User();
+    it("should be default allocated", function (done) {
+
+        expect(anonymousUser).not.toBeNull();
 
         done();
 

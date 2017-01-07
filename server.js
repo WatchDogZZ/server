@@ -58,43 +58,59 @@ app.use(function(req, res, next) {
 // of all connected users. If the user does not exist
 app.get('/where/:user?', (request, response) => {
 
-    var serviceList = service.getList();
+    service.getUserLocationList((err, serviceList) => {
 
-    if(undefined !== request.params.user) {
+        // TODO : error logger
+        
+        if (undefined !== request.params.user) {
+            // If a user is specified, filter it
 
-        var currentUser = serviceList.find( (el, idx, arr) => {
-            return el.name == request.params.user;
-        });
-
-        if (undefined !== currentUser) {
-            response.send({
-                "position": currentUser.position
+            var currentUser = serviceList.find((el, idx, arr) => {
+                return el.name == request.params.user;
             });
+
+            if (undefined !== currentUser) {
+                // User found, get the information and format it
+                response.send({
+                    'name': currentUser.name,
+                    'location': currentUser.location
+                });
+            } else {
+                // No user matching, sending default
+                response.send({
+                    'name': serviceEntities.defaultName,
+                    'location': serviceEntities.defaultLocation
+                });
+            }
+
         } else {
+            // If there is no filter, send back the full list
+
             response.send({
-                "position": service.defaultLocation
+                'list': serviceList
             });
         }
 
-    } else {
-
-        response.send({
-            "list": serviceList
-        });
-    }
-
-    response.end();
+        response.end();
+    });
 });
 
 // '/users'
 // Return the list of all connected users
 app.get('/users', (request, response) => {
-    response.send({
-        "users": service.getUsers()
+
+    service.getUsernameList((err, res) => {
+        
+        
+        response.send({
+            'list': res
+        });
+
+
+        response.end();
+
     });
     
-    response.end();
-
 });
 
 

@@ -59,7 +59,7 @@ describe('Mongo database', function () {
 
     it('should update the user location', function (done) {
 
-
+        /* // old method
         // Get the user and update the location
         database.getUser(user1Name, (err, item1) => {
 
@@ -74,6 +74,18 @@ describe('Mongo database', function () {
 
                 done();
             });
+
+        });
+        */
+
+        database.updateUserLocationByName(user1Name, loc, (err, item1) => {
+
+            // Just testing the error here            
+            expect(err).toBeNull();
+
+            user1.setLocation(loc) // Update this var to match next tests
+
+            done();
 
         });
 

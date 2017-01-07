@@ -38,9 +38,15 @@ const USER_COLLECTION_NAME = 'usersCollection';
 exports.deleteUser = function deleteUser(name, callback) {
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).deleteOne({ 'name': name }, (err, res) => {
-            callback(err, res);
-        });
+        if (null == err) {
+
+            db.collection(USER_COLLECTION_NAME).deleteOne({ 'name': name }, (err, res) => {
+                callback(err, res);
+            });
+
+        } else {
+            callback(err, null);
+        }
 
         db.close();
     });
@@ -149,6 +155,38 @@ exports.getUserList = function (callback) {
 }
 
 /**
+ * Get the positions of each User. This method only returns names and locations
+ *
+ * @param {resCallback} callback Called after the request.
+ */
+exports.getUserLocationList = function (callback) {
+
+    MongoClient.connect(DATABASE_URL, function (err, db) {
+
+        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0, name:1, location:1 }).toArray((err, item) => {
+
+            var userArray = [];
+
+            if (null != item) {
+                item.forEach((val, idx, arr) => {
+                    if (val != null) {
+                        userArray.push( val );
+                    }
+                });
+            }
+
+            callback(err, userArray);
+        });
+
+
+        db.close();
+
+    });
+
+}
+
+
+/**
  * Update the User information.
  *
  * @param {User} user The user object with updated information.
@@ -163,6 +201,32 @@ exports.updateUser = function (user, callback) {
         db.collection(USER_COLLECTION_NAME).findOneAndReplace({ 'name': user.getName() }, user, (err, res) => {
             callback(err, res);
         });
+
+        db.close();
+    });
+
+}
+
+/**
+ * Update the location of a user found by name
+ * @param {String} userName The name of the user
+ * @param {Array<Float>} location The array containing the new GPS coordinates
+ * @param {resCallback} callback Called after the request
+ */
+exports.updateUserLocationByName = function (userName, location, callback) {
+
+    MongoClient.connect(DATABASE_URL, (err, db) => {
+
+        db.collection(USER_COLLECTION_NAME).findOneAndUpdate(
+            { 'name': userName },
+            {
+                $set:
+                { 'location': location }
+            },
+            (err, res) => {
+                callback(err, res);
+            }
+        );
 
         db.close();
     });
