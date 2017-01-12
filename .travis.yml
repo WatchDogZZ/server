@@ -24,7 +24,7 @@ after_script: # Stop the server launched and the database
 #deployment on aws opsworks
 deploy:
     - provider: opsworks
-    - access-key-id: $ACCESS_KEY_ID
-    - secret-access-key: $SECRET_ACCESS_KEY
-    - app-id: $APP_ID
+    - access-key-id: ${ACCESS_KEY_ID}
+    - secret-access-key: ${SECRET_ACCESS_KEY}
+    - app-id: ${APP_ID}
 
