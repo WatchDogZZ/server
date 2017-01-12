@@ -33,13 +33,7 @@ app.set('port', SERVER_PORT);
 // Handle get request on root
 // Return simple html with greetings
 app.get('/', function (request, response) {
-    response.send(`
-    <html>
-        <body>
-            <h1>Welcome to WatchDogZZ web service home!</h1>
-        </body>
-    </html>
-    `);
+    response.send('<html><body><h1>Welcome to WatchDogZZ web service home!</h1></body></html>');
 
     response.end();
 });
