@@ -7,15 +7,15 @@
  */
 
 /// Packages imports
-const http = require('http');
-const express = require('express');
+var http = require('http');
+var express = require('express');
 
 /// Service files imports
-const service = require('./service.methods.js');
-const serviceEntities = require('./service.entities.js');
+var service = require('./service.methods.js');
+var serviceEntities = require('./service.entities.js');
 
-/// Configuration constants
-const SERVER_PORT = process.env.PORT || 80;
+/// Configuration of constants
+var SERVER_PORT = process.env.PORT || 80;
 
 
 /// Create the app
@@ -32,7 +32,7 @@ app.set('port', SERVER_PORT);
 
 // Handle get request on root
 // Return simple html with greetings
-app.get('/', (request, response) => {
+app.get('/', function (request, response) {
     response.send(`
     <html>
         <body>
@@ -56,16 +56,16 @@ app.use(function(req, res, next) {
 // '/where/user'
 // Return the location of a specific user. If user is ommited, return the positions
 // of all connected users. If the user does not exist
-app.get('/where/:user?', (request, response) => {
+app.get('/where/:user?', function (request, response) {
 
-    service.getUserLocationList((err, serviceList) => {
+    service.getUserLocationList(function (err, serviceList) {
 
         // TODO : error logger
         
         if (undefined !== request.params.user) {
             // If a user is specified, filter it
 
-            var currentUser = serviceList.find((el, idx, arr) => {
+            var currentUser = serviceList.find(function (el, idx, arr) {
                 return el.name == request.params.user;
             });
 
@@ -97,9 +97,9 @@ app.get('/where/:user?', (request, response) => {
 
 // '/users'
 // Return the list of all connected users
-app.get('/users', (request, response) => {
+app.get('/users', function (request, response) {
 
-    service.getUsernameList((err, res) => {
+    service.getUsernameList(function (err, res) {
         
         
         response.send({
@@ -119,7 +119,7 @@ app.get('/users', (request, response) => {
 /******************************************************************************/
 
 // The main http app
-http.createServer(app).listen(app.get('port'), () => {
+http.createServer(app).listen(app.get('port'), function () {
     // When the app is running
     console.log('[HTTP] app listening on port ' + app.get('port'));
 

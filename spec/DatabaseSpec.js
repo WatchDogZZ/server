@@ -2,8 +2,8 @@
 
 // Requires
 var MongoClient = require('mongodb').MongoClient;
-const database = require('../database.js');
-const serviceEntities = require('../service.entities');
+var database = require('../database.js');
+var serviceEntities = require('../service.entities');
 
 
 // Global data for testing
@@ -20,13 +20,13 @@ describe('Mongo database', function () {
     });
 
 
-    const user1Name = 'Testeur1';
-    const user1Location = [10.0, 10.0, 10.0];
+    var user1Name = 'Testeur1';
+    var user1Location = [10.0, 10.0, 10.0];
     var user1 = new serviceEntities.User(user1Name, user1Location);
 
     it('should create a new user', function (done) {
 
-        database.createUser(user1, (err, res) => {
+        database.createUser(user1, function (err, res) {
             expect(err).toBeNull();
 
             done();
@@ -37,7 +37,7 @@ describe('Mongo database', function () {
     it('should retrieve the created user', function (done) {
 
         // Get the user and test it in the callback        
-        database.getUser(user1Name, (err, item) => {
+        database.getUser(user1Name, function (err, item) {
 
             expect(err).toBeNull();
             expect(item).not.toBeNull();
@@ -61,7 +61,7 @@ describe('Mongo database', function () {
 
         /* // old method
         // Get the user and update the location
-        database.getUser(user1Name, (err, item1) => {
+        database.getUser(user1Name, function (err, item1) {
 
             expect(err).toBeNull();
             expect(item1).not.toBeNull();
@@ -69,7 +69,7 @@ describe('Mongo database', function () {
             item1.setLocation(loc);
             user1.setLocation(loc); // Update the var to match next tests
 
-            database.updateUser(item1, (err, res) => {
+            database.updateUser(item1, function (err, res) {
                 expect(err).toBeNull();
 
                 done();
@@ -78,7 +78,7 @@ describe('Mongo database', function () {
         });
         */
 
-        database.updateUserLocationByName(user1Name, loc, (err, item1) => {
+        database.updateUserLocationByName(user1Name, loc, function (err, item1) {
 
             // Just testing the error here            
             expect(err).toBeNull();
@@ -94,7 +94,7 @@ describe('Mongo database', function () {
     it('should match the location updated value', function (done) {
 
         // Check if the modifications are ok        
-        database.getUser(user1Name, (err, item2) => {
+        database.getUser(user1Name, function (err, item2) {
 
             expect(err).toBeNull();
             expect(item2).not.toBeNull();
@@ -107,36 +107,36 @@ describe('Mongo database', function () {
     });
 
 
-    const user2Name = 'Testeur2';
-    const user2Location = [20.0, 20.0, 20.0];
+    var user2Name = 'Testeur2';
+    var user2Location = [20.0, 20.0, 20.0];
     var user2 = new serviceEntities.User(user2Name, user2Location);
 
-    const user3Name = 'Testeur3';
-    const user3Location = [30.0, 30.0, 30.0];
+    var user3Name = 'Testeur3';
+    var user3Location = [30.0, 30.0, 30.0];
     var user3 = new serviceEntities.User(user3Name, user3Location);
 
-    const user4Name = 'Testeur4';
-    const user4Location = [40.0, 40.0, 40.0];
+    var user4Name = 'Testeur4';
+    var user4Location = [40.0, 40.0, 40.0];
     var user4 = new serviceEntities.User(user4Name, user4Location);
 
-    const user5Name = 'Testeur5';
-    const user5Location = [50.0, 50.0, 50.0];
+    var user5Name = 'Testeur5';
+    var user5Location = [50.0, 50.0, 50.0];
     var user5 = new serviceEntities.User(user5Name, user5Location);
 
-    const userNumber = 5;
+    var userNumber = 5;
 
     it('should add a bunch of users', function (done) {
 
-        database.createUser(user2, (err, res) => {
+        database.createUser(user2, function (err, res) {
             expect(err).toBeNull();
         });
-        database.createUser(user3, (err, res) => {
+        database.createUser(user3, function (err, res) {
             expect(err).toBeNull();
         });
-        database.createUser(user4, (err, res) => {
+        database.createUser(user4, function (err, res) {
             expect(err).toBeNull();
         });
-        database.createUser(user5, (err, res) => {
+        database.createUser(user5, function (err, res) {
             expect(err).toBeNull();
             done();
         });
@@ -145,7 +145,7 @@ describe('Mongo database', function () {
 
     it('should retrieve the name of the Users in the database', function (done) {
 
-        database.getUsernameList((err, item) => {
+        database.getUsernameList(function (err, item) {
             expect(err).toBeNull();
 
             // Do we have 5 usernames            
@@ -172,7 +172,7 @@ describe('Mongo database', function () {
         delete user4['_id'];
         delete user5['_id'];
 
-        database.getUserList((err, userList) => {
+        database.getUserList(function (err, userList) {
 
             expect(err).toBeNull();
             expect(userList).not.toBeNull();
@@ -194,7 +194,7 @@ describe('Mongo database', function () {
 
     it('should delete the user 1', function (done) {
 
-        database.deleteUser(user1Name, (err, res) => {
+        database.deleteUser(user1Name, function (err, res) {
             expect(err).toBeNull();
 
             done();
@@ -203,7 +203,7 @@ describe('Mongo database', function () {
 
 
     it('should check that the user 1 is deleted', function (done) {
-        database.getUser(user1Name, (err, item) => {
+        database.getUser(user1Name, function (err, item) {
 
             expect(err).toBeNull();
             expect(item).toBeNull();
@@ -215,10 +215,10 @@ describe('Mongo database', function () {
 
     it('should delete all the users', function (done) {
 
-        database.deleteUser(user2Name, (err, res) => { expect(err).toBeNull(); done(); });
-        database.deleteUser(user3Name, (err, res) => { expect(err).toBeNull(); done(); });
-        database.deleteUser(user4Name, (err, res) => { expect(err).toBeNull(); done(); });
-        database.deleteUser(user5Name, (err, res) => { expect(err).toBeNull(); done(); });
+        database.deleteUser(user2Name, function (err, res) { expect(err).toBeNull(); done(); });
+        database.deleteUser(user3Name, function (err, res) { expect(err).toBeNull(); done(); });
+        database.deleteUser(user4Name, function (err, res) { expect(err).toBeNull(); done(); });
+        database.deleteUser(user5Name, function (err, res) { expect(err).toBeNull(); done(); });
 
     });
 

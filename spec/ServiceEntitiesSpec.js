@@ -1,6 +1,6 @@
 // Testing the entities of the service
 
-const serviceEntities = require('../service.entities.js');
+var serviceEntities = require('../service.entities.js');
 
 describe("Service entities : User", function () {
 

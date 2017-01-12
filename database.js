@@ -27,7 +27,7 @@ exports.connect = function connect() {
 // Users manipulation functions
 /******************************************************************************/
 
-const USER_COLLECTION_NAME = 'usersCollection';
+var USER_COLLECTION_NAME = 'usersCollection';
 
 /**
  * Delete the user matching a username.
@@ -40,7 +40,7 @@ exports.deleteUser = function deleteUser(name, callback) {
 
         if (null == err) {
 
-            db.collection(USER_COLLECTION_NAME).deleteOne({ 'name': name }, (err, res) => {
+            db.collection(USER_COLLECTION_NAME).deleteOne({ 'name': name }, function (err, res) {
                 callback(err, res);
             });
 
@@ -62,7 +62,7 @@ exports.createUser = function addUser(user, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).insertOne(user, (err, res) => {
+        db.collection(USER_COLLECTION_NAME).insertOne(user, function (err, res) {
             callback(err, res);
         });
 
@@ -80,7 +80,7 @@ exports.getUser = function (name, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).findOne({ 'name': name }, (err, res) => {
+        db.collection(USER_COLLECTION_NAME).findOne({ 'name': name }, function (err, res) {
 
             if (null != res) {
                 // If we have a result, load a User entity
@@ -103,12 +103,12 @@ exports.getUsernameList = function (callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0, name: 1 }).toArray((err, item) => {
+        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0, name: 1 }).toArray(function (err, item) {
 
             var nameArray = [];
 
             if (null != item) {
-                item.forEach((val, idx, arr) => {
+                item.forEach(function (val, idx, arr) {
                     nameArray.push(val['name']);
                 });
             }
@@ -132,12 +132,12 @@ exports.getUserList = function (callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0 }).toArray((err, item) => {
+        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0 }).toArray(function (err, item) {
 
             var userArray = [];
 
             if (null != item) {
-                item.forEach((val, idx, arr) => {
+                item.forEach(function (val, idx, arr) {
                     if (val != null) {
                         userArray.push(serviceEntities.loadUserFromMongoDocument(val));
                     }
@@ -163,12 +163,12 @@ exports.getUserLocationList = function (callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0, name:1, location:1 }).toArray((err, item) => {
+        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0, name:1, location:1 }).toArray(function (err, item) {
 
             var userArray = [];
 
             if (null != item) {
-                item.forEach((val, idx, arr) => {
+                item.forEach(function (val, idx, arr) {
                     if (val != null) {
                         userArray.push( val );
                     }
@@ -198,7 +198,7 @@ exports.updateUser = function (user, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).findOneAndReplace({ 'name': user.getName() }, user, (err, res) => {
+        db.collection(USER_COLLECTION_NAME).findOneAndReplace({ 'name': user.getName() }, user, function (err, res) {
             callback(err, res);
         });
 
@@ -215,7 +215,7 @@ exports.updateUser = function (user, callback) {
  */
 exports.updateUserLocationByName = function (userName, location, callback) {
 
-    MongoClient.connect(DATABASE_URL, (err, db) => {
+    MongoClient.connect(DATABASE_URL, function (err, db) {
 
         db.collection(USER_COLLECTION_NAME).findOneAndUpdate(
             { 'name': userName },
@@ -223,7 +223,7 @@ exports.updateUserLocationByName = function (userName, location, callback) {
                 $set:
                 { 'location': location }
             },
-            (err, res) => {
+            function (err, res) {
                 callback(err, res);
             }
         );

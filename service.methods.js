@@ -9,7 +9,7 @@ var database = require('./database.js');
 /// Add the user in the database
 exports.login = function (user, callback) {
     
-    database.createUser(user, (err, res) => {
+    database.createUser(user, function (err, res) {
         // Just pass to callback
         callback(err, res);
     });
@@ -19,7 +19,7 @@ exports.login = function (user, callback) {
 /// Disconnect the user (remove it from db)
 exports.logout = function (userName, callback) {
 
-    database.deleteUser(userName, (err, res) => {
+    database.deleteUser(userName, function (err, res) {
 
         callback(err, res);
 
@@ -29,7 +29,7 @@ exports.logout = function (userName, callback) {
 /// Just get the names of connected users
 exports.getUsernameList = function (callback) {
     
-    database.getUsernameList((err, res) => {
+    database.getUsernameList(function (err, res) {
         
         callback(err, res);
 
@@ -41,7 +41,7 @@ exports.getUsernameList = function (callback) {
 /// Return a list of User instances
 exports.getUserList = function ( callback ) {
     
-    database.getUserList((err, res) => {
+    database.getUserList(function (err, res) {
 
         callback(err, res);
 
@@ -52,7 +52,7 @@ exports.getUserList = function ( callback ) {
 exports.getUserLocationList = function (callback) {
     
 
-    database.getUserLocationList((err, res) => {
+    database.getUserLocationList(function (err, res) {
 
         callback(err, res);
 
@@ -63,7 +63,7 @@ exports.getUserLocationList = function (callback) {
 /// Update the location of a user using its name
 exports.updateUserLocation = function (userName, location, callback) {
     
-    database.updateUserLocationByName(userName, location, (err, res) => {
+    database.updateUserLocationByName(userName, location, function (err, res) {
 
         callback(err, res);
 
