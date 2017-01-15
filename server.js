@@ -72,7 +72,7 @@ app.post('/login', function (request, response) {
         var user = new serviceEntities.User(name, location);
 
         service.login(user, function (err, res) {
-            
+
             if (null == err) {
                 response.status(200);
                 response.send({
@@ -111,7 +111,7 @@ app.post('/logout', function (request, response) {
 
     if (null != name) {
         service.logout(request.body.name, function (err, res) {
-            
+
 
             if (null == err) {
                 response.status(200);
@@ -135,7 +135,7 @@ app.post('/logout', function (request, response) {
         });
         response.end();
     }
-    
+
 
 });
 
@@ -187,14 +187,14 @@ app.get('/where/:user?', function (request, response) {
 // Update the user position
 // Pass a JSON containing the name, and the location
 app.post('/where', function (request, response) {
-    
+
     var name = request.body.name || null;
     var location = request.body.location || null;
 
     if (null != name && null != location) {
 
         service.updateUserLocation(name, location, function (err, res) {
-            
+
             if (null == err) {
                 response.status(200);
                 response.send({
@@ -212,7 +212,7 @@ app.post('/where', function (request, response) {
 
             }
         });
-        
+
     } else {
         response.status(400);
         response.send({
@@ -229,13 +229,23 @@ app.get('/users', function (request, response) {
 
     service.getUsernameList(function (err, res) {
 
+        if (null == err) {
+            response.status(200);
+            response.send({
+                'list': res
+            });
+            response.end();
 
-        response.send({
-            'list': res
-        });
+        } else {
+            response.status(200);
+            response.send({
+                'list': res
+            });
+            response.end();
+            
+        }
 
 
-        response.end();
 
     });
 
