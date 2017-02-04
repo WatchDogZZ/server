@@ -35,9 +35,7 @@ describe("Service", function () {
 
             expect(error).toBeNull();
             expect(response).not.toBeNull();
-
-            // var parsedResponse = JSON.parse(response);
-            // console.log(parsedResponse);
+            expect(body).not.toBeNull();
 
             var bodyParsed = JSON.parse(body);
 
@@ -51,7 +49,36 @@ describe("Service", function () {
 
     });
 
+    it('should give my initial position', function (done) {
 
+        request.get(SERVICE_URL + '/where', function (error, response, body) {
+
+            expect(error).toBeNull();
+            expect(response).not.toBeNull();
+            expect(body).not.toBeNull();
+
+            var bodyParsed = JSON.parse(body);
+
+            // To list should be not null and contain elements
+            expect(bodyParsed.list).not.toBeNull();
+            expect(bodyParsed.list.length).toBeGreaterThan(0);
+
+            var me = bodyParsed.list.filter((value, index, array) => {
+                return value.name == userName;
+            })[0];
+
+            expect(me).not.toBeNull();
+            expect(me).not.toBeUndefined();
+
+            console.log(me);
+
+            expect(me.location).toEqual(userLoc);
+
+            done();
+
+        });
+
+    });
 
     it('should logout me', function (done) {
 
