@@ -42,6 +42,21 @@ app.use(bodyParser.json()); // Parse JSON and place it in body
 
 
 /******************************************************************************/
+// Errors
+/******************************************************************************/
+
+const ERROR_503 = {
+    'status': 'fail',
+    'error': 'Database error'
+}
+
+const ERROR_400 = {
+    'status': 'fail',
+    'error': 'Internal server error'
+}
+
+
+/******************************************************************************/
 // Routing
 /******************************************************************************/
 
@@ -65,9 +80,11 @@ app.get('/', function (request, response) {
 // If the user uses other methods without the login, it will receive an error
 app.post('/login', function (request, response) {
 
+    // Get parameters    
     var name = request.body.name || null;
     var location = request.body.location || null;
 
+    // Check the parameters
     if (null != name && null != location) {
         var user = new serviceEntities.User(name, location);
 
@@ -76,15 +93,13 @@ app.post('/login', function (request, response) {
             if (null == err) {
                 response.status(200);
                 response.send({
-                    'status': 'ok'
+                    'status': 'ok',
+                    'id': res['_id'] // TODO: get the id oh the created user
                 });
 
             } else {
                 response.status(503);
-                response.send({
-                    'status': 'fail',
-                    'error': 'Database error'
-                });
+                response.send(ERROR_503);
 
             }
 
@@ -93,9 +108,7 @@ app.post('/login', function (request, response) {
 
     } else {
         response.status(400)
-        response.send({
-            'status': 'fail'
-        });
+        response.send(ERROR_400);
         response.end();
     }
 
@@ -107,11 +120,11 @@ app.post('/login', function (request, response) {
 // The user will disapear from the map on the phone
 app.post('/logout', function (request, response) {
 
+    // Get parameters
     var name = request.body.name || null;
 
     if (null != name) {
         service.logout(request.body.name, function (err, res) {
-
 
             if (null == err) {
                 response.status(200);
@@ -120,19 +133,14 @@ app.post('/logout', function (request, response) {
                 });
             } else {
                 response.status(503);
-                response.send({
-                    'status': 'fail',
-                    'error': 'Database error'
-                });
+                response.send(ERROR_503);
             }
 
             response.end();
         });
     } else {
         response.status(400);
-        response.send({
-            'status': 'fail'
-        });
+        response.send(ERROR_400);
         response.end();
     }
 
@@ -193,31 +201,56 @@ app.post('/where', function (request, response) {
 
     if (null != name && null != location) {
 
-        service.updateUserLocation(name, location, function (err, res) {
+        // Check if the user is there
+        service.getUsernameList(function (err, res) {
 
-            if (null == err) {
-                response.status(200);
-                response.send({
-                    'status': 'ok'
+            // If the user is not here, just log him
+            if (-1 == res.indexOf(name)) {
+                var user = new serviceEntities.User(name, location);
+
+                service.login(user, function (err, res) {
+
+                    if (null == err) {
+                        response.status(200);
+                        response.send({
+                            'status': 'ok'
+                        });
+
+                    } else {
+                        response.status(503);
+                        response.send(ERROR_503);
+
+                    }
+
+                    response.end();
                 });
-                response.end();
 
             } else {
-                response.status(503);
-                response.send({
-                    'status': 'fail',
-                    'error': 'Database error'
-                });
-                response.end();
 
+                // Just update the location
+                service.updateUserLocation(name, location, function (err, res) {
+
+                    if (null == err) {
+                        response.status(200);
+                        response.send({
+                            'status': 'ok'
+                        });
+                        response.end();
+
+                    } else {
+                        response.status(503);
+                        response.send(ERROR_503);
+                        response.end();
+
+                    }
+                });
             }
         });
 
+
     } else {
         response.status(400);
-        response.send({
-            'status': 'fail'
-        });
+        response.send(ERROR_400);
         response.end();
     }
 
@@ -225,7 +258,7 @@ app.post('/where', function (request, response) {
 
 // GET '/users'
 // Return the list of all connected users
-app.get('/users', function (request, response) {
+app.get('/who', function (request, response) {
 
     service.getUsernameList(function (err, res) {
 
@@ -242,7 +275,7 @@ app.get('/users', function (request, response) {
                 'list': res
             });
             response.end();
-            
+
         }
 
 

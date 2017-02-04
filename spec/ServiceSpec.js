@@ -9,23 +9,65 @@ var SERVICE_URL = "http://localhost:" + SERVICE_PORT;
 
 describe("Service", function () {
 
-    it('should give the array of connected users', function (done) {
+    var userName = 'benji';
+    var userLoc = [0.0, 0.0, 0.0];
 
-        // request(SERVICE_URL+"/users", function (error, response, body) {
-        //     done();
-        // });
+    it('should connect me', function (done) {
+
+        request.post(SERVICE_URL + '/login', {
+            json: true,
+            body: {
+                'name': userName,
+                'location': userLoc
+            }
+        }, function (error, response, body) {
+
+            expect(error).toBeNull();
+
+            done();
+        });
+
+    });
+
+    it('should contains my name in connected list', function (done) {
+
+        request.get(SERVICE_URL + '/who', function (error, response, body) {
+
+            expect(error).toBeNull();
+            expect(response).not.toBeNull();
+
+            // var parsedResponse = JSON.parse(response);
+            // console.log(parsedResponse);
+
+            var bodyParsed = JSON.parse(body);
+
+            expect(bodyParsed.list).toContain(userName);
+
+            done();
+
+        });
 
         done();
 
     });
 
-    it('should say that ben is at init position', function (done) {
 
-        // request(SERVICE_URL+"/where/ben", function (error, response, body) {
-        //     done();
-        // });
 
-        done();
+    it('should logout me', function (done) {
+
+        request.post(SERVICE_URL + '/logout', {
+            json: true,
+            body: {
+                'name': userName
+            }
+        },
+            function (error, response, body) {
+
+                expect(error).toBeNull();
+
+                done();
+
+            });
 
     });
 
