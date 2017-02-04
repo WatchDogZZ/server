@@ -70,9 +70,57 @@ describe("Service", function () {
             expect(me).not.toBeNull();
             expect(me).not.toBeUndefined();
 
-            console.log(me);
-
             expect(me.location).toEqual(userLoc);
+
+            done();
+
+        });
+
+    });
+
+    var newLoc1 = [10.0, 20.0, 30.0];
+
+    it('should update my location', function (done) {
+        
+        request.post(SERVICE_URL + '/where', {
+            json: true,
+            body: {
+                'name': userName,
+                'location': newLoc1
+            }
+        }, function (error, response, body) {
+
+            expect(error).toBeNull();
+            expect(response).not.toBeNull();
+            expect(body).not.toBeNull();
+
+            done();
+            
+        });
+
+    });
+
+    it('should give my new position', function (done) {
+
+        request.get(SERVICE_URL + '/where', function (error, response, body) {
+
+            expect(error).toBeNull();
+            expect(response).not.toBeNull();
+            expect(body).not.toBeNull();
+
+            var bodyParsed = JSON.parse(body);
+
+            expect(bodyParsed.list).not.toBeNull();
+            expect(bodyParsed.list.length).toBeGreaterThan(0);
+
+            var me = bodyParsed.list.filter((value, index, array) => {
+                return value.name == userName;
+            })[0];
+
+            expect(me).not.toBeNull();
+            expect(me).not.toBeUndefined();
+
+            expect(me.location).toEqual(newLoc1);
 
             done();
 
