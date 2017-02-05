@@ -19,7 +19,7 @@ var serviceEntities = require('./service.entities.js');
 var SERVER_PORT = process.env.PORT || 80;
 
 // Set the title to stop it more simply
-process.title = watchdogzz;
+process.title = "watchdogzz";
 
 /// Create the app
 var app = express();

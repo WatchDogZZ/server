@@ -48,6 +48,7 @@ describe("Service", function () {
         done();
 
     });
+    
 
     it('should give my initial position', function (done) {
 
@@ -99,6 +100,7 @@ describe("Service", function () {
         });
 
     });
+
 
     it('should give my new position', function (done) {
 
