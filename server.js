@@ -8,6 +8,7 @@
 
 /// Packages imports
 var http = require('http');
+var https = require('https');
 var express = require('express');
 var bodyParser = require('body-parser');
 var winston = require('winston');
@@ -17,7 +18,8 @@ var service = require('./service.methods.js');
 var serviceEntities = require('./service.entities.js');
 
 /// Configuration of constants
-var SERVER_PORT = process.env.PORT || 80;
+// var SERVER_PORT = process.env.PORT || 80;
+var SERVER_PORT = process.env.PORT || 443;
 
 // Set the title to stop it more simply
 process.title = "watchdogzz";
@@ -59,7 +61,7 @@ winston.configure({
         }),
 
         /*
-            Debug file will contain anything
+            Debug file will contain everything
         */
         new (winston.transports.File)({
             name: 'debug-file',
@@ -74,8 +76,40 @@ winston.configure({
 /******************************************************************************/
 // Config app
 /******************************************************************************/
-/// Create the app
+/// Create the app : this is the old http
 var app = express();
+
+var lex = require('letsencrypt-express').create({
+
+  server: 'staging' // for testing
+//   server: 'https://acme-v01.api.letsencrypt.org/directory'
+
+// We can also use http-01    
+, challenges: { 'tls-sni-01': require('le-challenge-sni').create({ webrootPath: './tmp/acme-challenges' }) }
+, challengeType: 'tls-sni-01'
+, store: require('le-store-certbot').create({ webrootPath: './tmp/acme-challenges' })
+, approveDomains: approveDomains
+});
+ 
+function approveDomains(opts, certs, cb) {
+  if (certs) {
+    opts.domains = certs.altnames;
+  }
+  else {
+    opts.domains = ['watchdogzz.ddns.net'];
+    opts.email = 'xxbbs007xx@gmail.com';
+    opts.agreeTos = true;
+  }
+ 
+  cb(null, { options: opts, certs: certs });
+}
+ 
+// var app = require('express')();
+app.use('/', function (req, res) {
+  res.end('Hello, World!');
+});
+ 
+/* create */
 
 app.locals.title = 'WatchDogZZ Web service';
 app.set('port', SERVER_PORT);
@@ -105,7 +139,6 @@ const ERROR_400 = {
     'status': 'fail',
     'error': 'Internal server error'
 }
-
 
 /******************************************************************************/
 // Routing
@@ -337,15 +370,18 @@ app.get('/who', function (request, response) {
 
 });
 
-
-
 /******************************************************************************/
 // Create the http server with the app
 /******************************************************************************/
 
 // The main http app
 winston.info('Server is starting');
-http.createServer(app).listen(app.get('port'), function () {
-    // When the app is running
+// http.createServer(app).listen(app.get('port'), function () {
+//     // When the app is running
+//     winston.info('Server running on port ' + app.get('port'));
+// });
+
+https.createServer(lex.httpsOptions, lex.middleware(app)).listen(SERVER_PORT, function () {
     winston.info('Server running on port ' + app.get('port'));
+    winston.info('Listening for ACME tls-sni-01 challenges and serve app on ', this.address());
 });
