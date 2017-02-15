@@ -8,7 +8,7 @@
 # Your ~/.ssh must contain the filename provided here
 export ec2_private_key="id_rsa"
 export ec2_username="ubuntu"
-export ec2_ip="watchdogzz.ddns.net"
+export ec2_ip="192.168.1.16"
 
 . deploy-ec2.sh
 
