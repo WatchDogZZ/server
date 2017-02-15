@@ -10,6 +10,7 @@
 var http = require('http');
 var express = require('express');
 var bodyParser = require('body-parser');
+var winston = require('winston');
 
 /// Service files imports
 var service = require('./service.methods.js');
@@ -21,12 +22,60 @@ var SERVER_PORT = process.env.PORT || 80;
 // Set the title to stop it more simply
 process.title = "watchdogzz";
 
-/// Create the app
-var app = express();
+/******************************************************************************/
+// Config winston
+/******************************************************************************/
+/* Info: winston levels
+    { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
+*/
+winston.configure({
+
+    exitOnError: false,
+
+    transports: [
+
+        /*
+            Errors are in a separated file
+        */
+        new (winston.transports.File)({
+            name: 'error-file',
+            level: 'error',
+            filename: './logs/server-error.log',
+            maxsize: 5242880, // 5MB
+            json: false,
+            handleExceptions: true,
+            humanReadableUnhandledException: true
+        }),
+
+        /*
+            Info file will contain info and errors
+        */
+        new (winston.transports.File)({
+            name: 'info-file',
+            level: 'info',
+            filename: './logs/server-info.log',
+            maxsize: 5242880, // 5MB
+            json: false
+        }),
+
+        /*
+            Debug file will contain anything
+        */
+        new (winston.transports.File)({
+            name: 'debug-file',
+            level: 'debug',
+            filename: './logs/server-debug.log',
+            maxsize: 5242880, // 5MB
+            json: false
+        })
+    ]
+});
 
 /******************************************************************************/
-// Config
+// Config app
 /******************************************************************************/
+/// Create the app
+var app = express();
 
 app.locals.title = 'WatchDogZZ Web service';
 app.set('port', SERVER_PORT);
@@ -102,7 +151,7 @@ app.post('/login', function (request, response) {
             } else {
                 response.status(503);
                 response.send(ERROR_503);
-
+                winston.error('Error 503 on login request', request.ip, request.headers, JSON.stringify(request.body));
             }
 
             response.end();
@@ -111,6 +160,7 @@ app.post('/login', function (request, response) {
     } else {
         response.status(400)
         response.send(ERROR_400);
+        winston.error('Error 400 on login request ', request.ip, request.headers, JSON.stringify(request.body));
         response.end();
     }
 
@@ -136,6 +186,7 @@ app.post('/logout', function (request, response) {
             } else {
                 response.status(503);
                 response.send(ERROR_503);
+                winston.error('Error 503 on logout request ', request.ip, request.headers, JSON.stringify(request.body));
             }
 
             response.end();
@@ -143,6 +194,7 @@ app.post('/logout', function (request, response) {
     } else {
         response.status(400);
         response.send(ERROR_400);
+        winston.error('Error 400 on logout request ', request.ip, request.headers, JSON.stringify(request.body));
         response.end();
     }
 
@@ -221,7 +273,7 @@ app.post('/where', function (request, response) {
                     } else {
                         response.status(503);
                         response.send(ERROR_503);
-
+                        winston.error('Error 503 on where request ', request.ip, request.headers, JSON.stringify(request.body));
                     }
 
                     response.end();
@@ -243,7 +295,7 @@ app.post('/where', function (request, response) {
                         response.status(503);
                         response.send(ERROR_503);
                         response.end();
-
+                        winston.error('Error 503 on where request ', request.ip, request.headers, JSON.stringify(request.body));
                     }
                 });
             }
@@ -254,6 +306,7 @@ app.post('/where', function (request, response) {
         response.status(400);
         response.send(ERROR_400);
         response.end();
+        winston.error('Error 400 on where request ', request.ip, request.headers, JSON.stringify(request.body));
     }
 
 });
@@ -280,8 +333,6 @@ app.get('/who', function (request, response) {
 
         }
 
-
-
     });
 
 });
@@ -293,8 +344,8 @@ app.get('/who', function (request, response) {
 /******************************************************************************/
 
 // The main http app
+winston.info('Server is starting');
 http.createServer(app).listen(app.get('port'), function () {
     // When the app is running
-    console.log('[HTTP] app listening on port ' + app.get('port'));
-
+    winston.info('Server running on port ' + app.get('port'));
 });

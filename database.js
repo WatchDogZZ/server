@@ -2,6 +2,7 @@
 
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
+var winston = require('winston');
 
 var serviceEntities = require('./service.entities.js');
 
@@ -46,6 +47,7 @@ exports.deleteUser = function deleteUser(name, callback) {
 
         } else {
             callback(err, null);
+            winston.error('MongoDB error on deleteUser', err);
         }
 
         db.close();
