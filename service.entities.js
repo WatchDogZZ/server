@@ -2,7 +2,7 @@
 
 exports.defaultName = "John Doe";
 exports.defaultLocation = [0.0, 0.0, 0.0];
-exports.defaultEmail = "mail@example.com";
+exports.defaultEmail = "";
 exports.defaultPhoto = "default";
 exports.defaultToken = "";
 

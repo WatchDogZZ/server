@@ -167,7 +167,7 @@ exports.getUserList = function (callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0 }).toArray(function (err, item) {
+        db.collection(USER_COLLECTION_NAME).find().project({ _id: 0, token: 0 }).toArray(function (err, item) {
 
             var userArray = [];
 
