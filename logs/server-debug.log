@@ -1,0 +1,34 @@
+2017-02-21T10:59:48.763Z - info: Server is starting
+2017-02-21T10:59:48.770Z - info: Server running on port 80
+2017-02-21T12:19:04.341Z - info: Server is starting
+2017-02-21T12:19:04.349Z - info: Server running on port 80
+2017-02-21T12:19:08.534Z - error: Error 400 on where request  ::ffff:127.0.0.1 { host: 'localhost:80',
+  accept: 'application/json',
+  'content-type': 'application/json',
+  'content-length': '38',
+  connection: 'close' } {"name":"benji","location":[10,20,30]}
+2017-02-21T12:19:08.548Z - error: Error 400 on logout request  ::ffff:127.0.0.1 { host: 'localhost:80',
+  accept: 'application/json',
+  'content-type': 'application/json',
+  'content-length': '16',
+  connection: 'close' } {"name":"benji"}
+2017-02-21T12:22:14.793Z - info: Server is starting
+2017-02-21T12:22:14.802Z - info: Server running on port 80
+2017-02-21T12:24:15.741Z - info: Server is starting
+2017-02-21T12:24:15.753Z - info: Server running on port 80
+2017-02-21T12:27:03.426Z - info: Server is starting
+2017-02-21T12:27:03.434Z - info: Server running on port 80
+2017-02-21T12:27:53.767Z - info: Server is starting
+2017-02-21T12:27:53.775Z - info: Server running on port 80
+2017-02-21T12:29:14.893Z - info: Server is starting
+2017-02-21T12:29:14.901Z - info: Server running on port 80
+2017-02-21T12:29:43.899Z - info: Server is starting
+2017-02-21T12:29:43.906Z - info: Server running on port 80
+2017-02-21T12:30:35.320Z - info: Server is starting
+2017-02-21T12:30:35.329Z - info: Server running on port 80
+2017-02-21T12:31:51.010Z - info: Server is starting
+2017-02-21T12:31:51.018Z - info: Server running on port 80
+2017-02-21T12:33:39.209Z - info: Server is starting
+2017-02-21T12:33:39.217Z - info: Server running on port 80
+2017-02-21T12:37:11.403Z - info: Server is starting
+2017-02-21T12:37:11.411Z - info: Server running on port 80

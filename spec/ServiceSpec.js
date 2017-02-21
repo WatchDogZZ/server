@@ -11,6 +11,7 @@ describe("Service", function () {
 
     var userName = 'benji';
     var userLoc = [0.0, 0.0, 0.0];
+    var userToken = (Math.ceil(Math.random() * 1000000)).toString();
 
     it('should connect me', function (done) {
 
@@ -18,11 +19,42 @@ describe("Service", function () {
             json: true,
             body: {
                 'name': userName,
-                'location': userLoc
+                'location': userLoc,
+                'token' : userToken
             }
         }, function (error, response, body) {
 
             expect(error).toBeNull();
+
+            done();
+        });
+
+    });
+
+    it('should connect me only once', function (done) {
+
+        request.post(SERVICE_URL + '/login', {
+            json: true,
+            body: {
+                'name': userName,
+                'location': userLoc,
+                'token' : userToken
+            }
+        }, function (error, response, body) {
+
+            expect(error).toBeNull();
+
+            request.get(SERVICE_URL + '/who', function (error, response, body) {
+                
+                expect(error).toBeNull();
+                expect(response).not.toBeNull();
+                expect(body).not.toBeNull();
+
+                var bodyParsed = JSON.parse(body);
+
+                expect(bodyParsed.list.length).toEqual(1);
+
+            });
 
             done();
         });
@@ -87,7 +119,8 @@ describe("Service", function () {
             json: true,
             body: {
                 'name': userName,
-                'location': newLoc1
+                'location': newLoc1,
+                'token': userToken
             }
         }, function (error, response, body) {
 
@@ -135,7 +168,8 @@ describe("Service", function () {
         request.post(SERVICE_URL + '/logout', {
             json: true,
             body: {
-                'name': userName
+                'name': userName,
+                'token': userToken
             }
         },
             function (error, response, body) {

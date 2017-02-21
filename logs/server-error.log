@@ -1,0 +1,73 @@
+2017-02-21T12:19:08.533Z - error: Error 400 on where request  ::ffff:127.0.0.1 { host: 'localhost:80',
+  accept: 'application/json',
+  'content-type': 'application/json',
+  'content-length': '38',
+  connection: 'close' } {"name":"benji","location":[10,20,30]}
+2017-02-21T12:19:08.548Z - error: Error 400 on logout request  ::ffff:127.0.0.1 { host: 'localhost:80',
+  accept: 'application/json',
+  'content-type': 'application/json',
+  'content-length': '16',
+  connection: 'close' } {"name":"benji"}
+2017-02-21T12:20:56.671Z - error: uncaughtException: db.collection(...).findOne(...).toArray is not a function date=Tue Feb 21 2017 13:20:56 GMT+0100 (Paris, Madrid), pid=14900, uid=null, gid=null, cwd=C:\Users\bbs-0\Repositories\WatchDogZZ\server, execPath=C:\Program Files (x86)\nodejs\node.exe, version=v6.5.0, argv=[C:\Program Files (x86)\nodejs\node.exe, C:\Users\bbs-0\Repositories\WatchDogZZ\server\server.js], rss=43958272, heapTotal=21008384, heapUsed=17144928, loadavg=[0, 0, 0], uptime=398837.0974742
+TypeError: db.collection(...).findOne(...).toArray is not a function
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\database.js:143:73
+    at connectCallback (C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:315:5)
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:234:11
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
+2017-02-21T12:22:20.144Z - error: uncaughtException: db.collection(...).findOne(...).toArray is not a function date=Tue Feb 21 2017 13:22:20 GMT+0100 (Paris, Madrid), pid=10220, uid=null, gid=null, cwd=C:\Users\bbs-0\Repositories\WatchDogZZ\server, execPath=C:\Program Files (x86)\nodejs\node.exe, version=v6.5.0, argv=[C:\Program Files (x86)\nodejs\node.exe, C:\Users\bbs-0\Repositories\WatchDogZZ\server\server.js], rss=35127296, heapTotal=21008384, heapUsed=16455608, loadavg=[0, 0, 0], uptime=398920.5768773
+TypeError: db.collection(...).findOne(...).toArray is not a function
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\database.js:143:73
+    at connectCallback (C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:315:5)
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:234:11
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
+2017-02-21T12:24:21.978Z - error: uncaughtException: db.collection(...).findOne(...).toArray is not a function date=Tue Feb 21 2017 13:24:21 GMT+0100 (Paris, Madrid), pid=18564, uid=null, gid=null, cwd=C:\Users\bbs-0\Repositories\WatchDogZZ\server, execPath=C:\Program Files (x86)\nodejs\node.exe, version=v6.5.0, argv=[C:\Program Files (x86)\nodejs\node.exe, C:\Users\bbs-0\Repositories\WatchDogZZ\server\server.js], rss=33587200, heapTotal=19959808, heapUsed=16019440, loadavg=[0, 0, 0], uptime=399042.4058286
+TypeError: db.collection(...).findOne(...).toArray is not a function
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\database.js:143:73
+    at connectCallback (C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:315:5)
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:234:11
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
+2017-02-21T12:27:06.342Z - error: uncaughtException: db.collection(...).findOne(...).toArray is not a function date=Tue Feb 21 2017 13:27:06 GMT+0100 (Paris, Madrid), pid=20796, uid=null, gid=null, cwd=C:\Users\bbs-0\Repositories\WatchDogZZ\server, execPath=C:\Program Files (x86)\nodejs\node.exe, version=v6.5.0, argv=[C:\Program Files (x86)\nodejs\node.exe, C:\Users\bbs-0\Repositories\WatchDogZZ\server\server.js], rss=40656896, heapTotal=33591296, heapUsed=18489760, loadavg=[0, 0, 0], uptime=399206.7743967
+TypeError: db.collection(...).findOne(...).toArray is not a function
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\database.js:143:73
+    at connectCallback (C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:315:5)
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:234:11
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
+2017-02-21T12:27:56.262Z - error: uncaughtException: db.collection(...).findOne(...).toArray is not a function date=Tue Feb 21 2017 13:27:56 GMT+0100 (Paris, Madrid), pid=22096, uid=null, gid=null, cwd=C:\Users\bbs-0\Repositories\WatchDogZZ\server, execPath=C:\Program Files (x86)\nodejs\node.exe, version=v6.5.0, argv=[C:\Program Files (x86)\nodejs\node.exe, C:\Users\bbs-0\Repositories\WatchDogZZ\server\server.js], rss=40312832, heapTotal=33591296, heapUsed=18533296, loadavg=[0, 0, 0], uptime=399256.6939858
+TypeError: db.collection(...).findOne(...).toArray is not a function
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\database.js:143:73
+    at connectCallback (C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:315:5)
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:234:11
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
+2017-02-21T12:29:18.286Z - error: uncaughtException: db.collection(...).findOne(...).toArray is not a function date=Tue Feb 21 2017 13:29:18 GMT+0100 (Paris, Madrid), pid=12908, uid=null, gid=null, cwd=C:\Users\bbs-0\Repositories\WatchDogZZ\server, execPath=C:\Program Files (x86)\nodejs\node.exe, version=v6.5.0, argv=[C:\Program Files (x86)\nodejs\node.exe, C:\Users\bbs-0\Repositories\WatchDogZZ\server\server.js], rss=40615936, heapTotal=33591296, heapUsed=18503688, loadavg=[0, 0, 0], uptime=399338.7193029
+TypeError: db.collection(...).findOne(...).toArray is not a function
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\database.js:143:73
+    at connectCallback (C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:315:5)
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:234:11
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
+2017-02-21T12:29:47.904Z - error: uncaughtException: db.collection(...).findOne(...).toArray is not a function date=Tue Feb 21 2017 13:29:47 GMT+0100 (Paris, Madrid), pid=18000, uid=null, gid=null, cwd=C:\Users\bbs-0\Repositories\WatchDogZZ\server, execPath=C:\Program Files (x86)\nodejs\node.exe, version=v6.5.0, argv=[C:\Program Files (x86)\nodejs\node.exe, C:\Users\bbs-0\Repositories\WatchDogZZ\server\server.js], rss=40386560, heapTotal=33591296, heapUsed=18498400, loadavg=[0, 0, 0], uptime=399368.3334793
+TypeError: db.collection(...).findOne(...).toArray is not a function
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\database.js:143:73
+    at connectCallback (C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:315:5)
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:234:11
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
+2017-02-21T12:30:38.959Z - error: uncaughtException: db.collection(...).findOne(...).toArray is not a function date=Tue Feb 21 2017 13:30:38 GMT+0100 (Paris, Madrid), pid=8572, uid=null, gid=null, cwd=C:\Users\bbs-0\Repositories\WatchDogZZ\server, execPath=C:\Program Files (x86)\nodejs\node.exe, version=v6.5.0, argv=[C:\Program Files (x86)\nodejs\node.exe, C:\Users\bbs-0\Repositories\WatchDogZZ\server\server.js], rss=40579072, heapTotal=33591296, heapUsed=18518536, loadavg=[0, 0, 0], uptime=399419.392037
+TypeError: db.collection(...).findOne(...).toArray is not a function
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\database.js:143:73
+    at connectCallback (C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:315:5)
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:234:11
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
+2017-02-21T12:31:55.500Z - error: uncaughtException: db.collection(...).findOne(...).toArray is not a function date=Tue Feb 21 2017 13:31:55 GMT+0100 (Paris, Madrid), pid=19352, uid=null, gid=null, cwd=C:\Users\bbs-0\Repositories\WatchDogZZ\server, execPath=C:\Program Files (x86)\nodejs\node.exe, version=v6.5.0, argv=[C:\Program Files (x86)\nodejs\node.exe, C:\Users\bbs-0\Repositories\WatchDogZZ\server\server.js], rss=40542208, heapTotal=33591296, heapUsed=18520256, loadavg=[0, 0, 0], uptime=399495.9276407
+TypeError: db.collection(...).findOne(...).toArray is not a function
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\database.js:148:73
+    at connectCallback (C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:315:5)
+    at C:\Users\bbs-0\Repositories\WatchDogZZ\server\node_modules\mongodb\lib\mongo_client.js:234:11
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
