@@ -3,7 +3,7 @@
 exports.defaultName = "John Doe";
 exports.defaultLocation = [0.0, 0.0, 0.0];
 exports.defaultEmail = "";
-exports.defaultPhoto = "default";
+exports.defaultPhoto = "";
 exports.defaultToken = "";
 
 /**
