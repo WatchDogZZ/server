@@ -183,8 +183,7 @@ app.post('/login', function (request, response) {
             if (null == err) {
                 response.status(200);
                 response.send({
-                    'status': 'ok',
-                    'id': res['_id'] // TODO: get the id oh the created user
+                    'status': 'ok'
                 });
 
             } else {
@@ -360,13 +359,10 @@ app.get('/who', function (request, response) {
             response.end();
 
         } else {
-            response.status(200);
-            response.send({
-                'status': 'ok',
-                'list': res
-            });
+            response.status(503);
+            response.send(ERROR_503);
             response.end();
-
+            winston.error('Error 503 on who request ', request.ip, request.headers, JSON.stringify(request.body));
         }
 
     });
