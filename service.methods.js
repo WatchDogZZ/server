@@ -17,9 +17,9 @@ exports.login = function (user, callback) {
 }
 
 /// Disconnect the user (remove it from db)
-exports.logout = function (userName, callback) {
+exports.logout = function (userToken, callback) {
 
-    database.deleteUser(userName, function (err, res) {
+    database.deleteUser(userToken, function (err, res) {
 
         callback(err, res);
 
@@ -61,9 +61,19 @@ exports.getUserLocationList = function (callback) {
 }
 
 /// Update the location of a user using its name
-exports.updateUserLocation = function (userName, location, callback) {
+exports.updateUserLocation = function (userToken, location, callback) {
     
-    database.updateUserLocationByName(userName, location, function (err, res) {
+    database.updateUserLocationByToken(userToken, location, function (err, res) {
+
+        callback(err, res);
+
+    });
+}
+
+/// Check if the token is connected (res == false | true)
+exports.checkToken = function (userToken, callback) {
+    
+    database.isTokenConnected(userToken, function (err, res) {
 
         callback(err, res);
 
