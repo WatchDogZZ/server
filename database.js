@@ -33,15 +33,15 @@ var USER_COLLECTION_NAME = 'usersCollection';
 /**
  * Delete the user matching a username.
  *
- * @param {string} name The name of the user to delete.
+ * @param {string} token The token of the user to delete.
  * @param {resCallback} callback Called after the request.
  */
-exports.deleteUser = function deleteUser(name, callback) {
+exports.deleteUser = function deleteUser(token, callback) {
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
         if (null == err) {
 
-            db.collection(USER_COLLECTION_NAME).deleteOne({ 'name': name }, function (err, res) {
+            db.collection(USER_COLLECTION_NAME).deleteOne({ 'token': token }, function (err, res) {
                 callback(err, res);
             });
 
@@ -55,7 +55,8 @@ exports.deleteUser = function deleteUser(name, callback) {
 }
 
 /**
- * Create a new User in the database.
+ * Create a new User in the database. If the user is already here (same token),
+ *  replace its data with the new ones
  *
  * @param {User} user The User instance to add in the database.
  * @param {resCallback} callback Called after the request.
@@ -64,10 +65,20 @@ exports.createUser = function addUser(user, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).insertOne(user, function (err, res) {
+        db.collection(USER_COLLECTION_NAME).findOneAndReplace(
+            { 'token': user.getToken() }, // filter
+            user, // doc to insert
+            { upsert: true }, // upsert : will create if none is found
+            function (err, res) { // res callback
             callback(err, res);
         });
 
+/*        
+        db.collection(USER_COLLECTION_NAME).insertOne(user, function (err, res) {
+            callback(err, res);
+        });
+*/
+        
         db.close();
     });
 }
@@ -75,14 +86,14 @@ exports.createUser = function addUser(user, callback) {
 /**
  * Get a user using the username to select it.
  *
- * @param {string} name The name of the user to select.
+ * @param {string} token The name of the user to select.
  * @param {resCallback} callback Called after the request.
  */
-exports.getUser = function (name, callback) {
+exports.getUser = function (token, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).findOne({ 'name': name }, function (err, res) {
+        db.collection(USER_COLLECTION_NAME).findOne({ 'token': token }, function (err, res) {
 
             if (null != res) {
                 // If we have a result, load a User entity
@@ -121,6 +132,28 @@ exports.getUsernameList = function (callback) {
 
         db.close();
 
+    });
+
+}
+
+exports.isTokenConnected = function (token, callback) {
+
+    MongoClient.connect(DATABASE_URL, function (err, db) {
+        
+        db.collection(USER_COLLECTION_NAME).findOne({ 'token': token }, function (err, res) {
+
+            if (null != res) {
+                // Yes we have it connected
+                callback(err, true);
+
+            } else {
+                // No we do not have it connected
+                callback(err, false);
+
+            }
+        });
+        
+        db.close();
     });
 
 }
@@ -196,11 +229,11 @@ exports.getUserLocationList = function (callback) {
  */
 exports.updateUser = function (user, callback) {
 
-    var nameFilter = user.getName();
+    var token = user.getToken();
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
-        db.collection(USER_COLLECTION_NAME).findOneAndReplace({ 'name': user.getName() }, user, function (err, res) {
+        db.collection(USER_COLLECTION_NAME).findOneAndReplace({ 'token': token }, user, function (err, res) {
             callback(err, res);
         });
 
@@ -211,16 +244,16 @@ exports.updateUser = function (user, callback) {
 
 /**
  * Update the location of a user found by name
- * @param {String} userName The name of the user
+ * @param {String} userToken The token of the user
  * @param {Array<Float>} location The array containing the new GPS coordinates
  * @param {resCallback} callback Called after the request
  */
-exports.updateUserLocationByName = function (userName, location, callback) {
+exports.updateUserLocationByToken = function (userToken, location, callback) {
 
     MongoClient.connect(DATABASE_URL, function (err, db) {
 
         db.collection(USER_COLLECTION_NAME).findOneAndUpdate(
-            { 'name': userName },
+            { 'token': userToken },
             {
                 $set:
                 { 'location': location }

@@ -2,13 +2,25 @@
 
 exports.defaultName = "John Doe";
 exports.defaultLocation = [0.0, 0.0, 0.0];
+exports.defaultEmail = "mail@example.com";
+exports.defaultPhoto = "default";
+exports.defaultToken = "";
 
 /**
  * @class
  */
-function User(name = exports.defaultName, location = exports.defaultLocation) {
+function User(name = exports.defaultName,
+    location = exports.defaultLocation,
+    token = exports.defaultToken,
+    email = exports.defaultEmail,
+    photo = exports.defaultPhoto
+) {
+
     this.name = name;
     this.location = location;
+    this.token = token;
+    this.email = email;
+    this.photo = photo;
 }
 
 /**
@@ -73,6 +85,26 @@ User.prototype.setLocation = function (locationArray) {
         this.location[2] = locationArray[2];
     }
 
+}
+
+User.prototype.getToken = function () {
+    return this.token;
+}
+
+User.prototype.getEmail = function () {
+    return this.email;
+}
+
+User.prototype.setEmail = function (email) {
+    this.email = email;
+}
+
+User.prototype.getPhoto = function () {
+    return this.photo;
+}
+
+User.prototype.setPhoto = function (photo) {
+    this.photo = photo;
 }
 
 exports.User = User;

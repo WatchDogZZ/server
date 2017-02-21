@@ -159,13 +159,24 @@ app.get('/', function (request, response) {
 // If the user uses other methods without the login, it will receive an error
 app.post('/login', function (request, response) {
 
-    // Get parameters    
+    // Get required parameters
     var name = request.body.name || null;
     var location = request.body.location || null;
+    var token = request.body.token || null;
+
+    // Get optional parameters
+    var email = request.body.email || null;
+    var photo = request.body.photo || null;
 
     // Check the parameters
-    if (null != name && null != location) {
-        var user = new serviceEntities.User(name, location);
+    if (null != name && null != location && null != token) {
+
+        // Create user with required parameters
+        var user = new serviceEntities.User(name, location, token);
+
+        // Adding optional fields
+        if (null != email) { user.setEmail(email); }
+        if (null != photo) { user.setPhoto(photo); }
 
         service.login(user, function (err, res) {
 
@@ -201,10 +212,10 @@ app.post('/login', function (request, response) {
 app.post('/logout', function (request, response) {
 
     // Get parameters
-    var name = request.body.name || null;
+    var token = request.body.token || null;
 
-    if (null != name) {
-        service.logout(request.body.name, function (err, res) {
+    if (null != token) {
+        service.logout(token, function (err, res) {
 
             if (null == err) {
                 response.status(200);
@@ -230,43 +241,23 @@ app.post('/logout', function (request, response) {
 });
 
 // GET '/where/user'
-// Return the location of a specific user. If user is ommited, return the positions
-// of all connected users. If the user does not exist
-app.get('/where/:user?', function (request, response) {
+// Return the location of all users connected
+app.get('/where', function (request, response) {
 
-    service.getUserLocationList(function (err, serviceList) {
+    service.getUserList(function (err, serviceList) {
 
-        // TODO : error logger
+        if (null == err) {
 
-        if (undefined !== request.params.user) {
-            // If a user is specified, filter it
-
-            var currentUser = serviceList.find(function (el, idx, arr) {
-                return el.name == request.params.user;
-            });
-
-            if (undefined !== currentUser) {
-                // User found, get the information and format it
-                response.status(200);
-                response.send({
-                    'name': currentUser.name,
-                    'location': currentUser.location
-                });
-            } else {
-                // No user matching, sending default
-                response.status(200);
-                response.send({
-                    'name': serviceEntities.defaultName,
-                    'location': serviceEntities.defaultLocation
-                });
-            }
-
-        } else {
-            // If there is no filter, send back the full list
             response.status(200);
             response.send({
+                'status': 'ok',
                 'list': serviceList
             });
+        } else {
+
+            response.status(503);
+            response.send(ERROR_503);
+            winston.error('Error 503 on where request', request.ip, request.headers, JSON.stringify(request.body));
         }
 
         response.end();
@@ -280,55 +271,70 @@ app.post('/where', function (request, response) {
 
     var name = request.body.name || null;
     var location = request.body.location || null;
+    var token = request.body.token || null;
 
-    if (null != name && null != location) {
+    /*
+    If the user is already connected, just update the location
+    If the user is not connected, log him (but he will have the default
+    information for optional fields)
+    */
+    if (null != location && null != token) {
 
-        // Check if the user is there
-        service.getUsernameList(function (err, res) {
+        service.checkToken(token, function (err, res) {
 
-            // If the user is not here, just log him
-            if (-1 == res.indexOf(name)) {
-                var user = new serviceEntities.User(name, location);
+            if (false == res) {
+                // Not connected
 
-                service.login(user, function (err, res) {
+                if (null != name) {
+                    // We can login be cause we have the correct information
+                    var user = new serviceEntities.User(name, location, token);
 
-                    if (null == err) {
-                        response.status(200);
-                        response.send({
-                            'status': 'ok'
-                        });
+                    service.login(user, function (err, res) {
+                        if (null == err) {
+                            response.status(200);
+                            response.send({
+                                'status': 'ok'
+                            });
 
-                    } else {
-                        response.status(503);
-                        response.send(ERROR_503);
-                        winston.error('Error 503 on where request ', request.ip, request.headers, JSON.stringify(request.body));
-                    }
+                        } else {
+                            response.status(503);
+                            response.send(ERROR_503);
+                            winston.error('Error 503 on login with where request ', request.ip, request.headers, JSON.stringify(request.body));
+                        }
 
+                        response.end();
+                    });
+
+                } else {
+                    // Notify the user we cant handle the request
+
+                    response.status(400);
+                    response.send(ERROR_400);
                     response.end();
-                });
+                    winston.error('Error 400 on where request ', request.ip, request.headers, JSON.stringify(request.body));
+                }
 
             } else {
+                // Connected
 
-                // Just update the location
-                service.updateUserLocation(name, location, function (err, res) {
+                service.updateUserLocation(token, location, function (err, res) {
 
                     if (null == err) {
                         response.status(200);
                         response.send({
                             'status': 'ok'
                         });
-                        response.end();
 
                     } else {
                         response.status(503);
                         response.send(ERROR_503);
-                        response.end();
                         winston.error('Error 503 on where request ', request.ip, request.headers, JSON.stringify(request.body));
                     }
+                    response.end();
                 });
             }
-        });
 
+        });
 
     } else {
         response.status(400);
@@ -348,6 +354,7 @@ app.get('/who', function (request, response) {
         if (null == err) {
             response.status(200);
             response.send({
+                'status': 'ok',
                 'list': res
             });
             response.end();
@@ -355,6 +362,7 @@ app.get('/who', function (request, response) {
         } else {
             response.status(200);
             response.send({
+                'status': 'ok',
                 'list': res
             });
             response.end();
