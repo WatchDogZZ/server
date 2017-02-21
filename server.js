@@ -103,12 +103,7 @@ function approveDomains(opts, certs, cb) {
  
   cb(null, { options: opts, certs: certs });
 }
- 
-// var app = require('express')();
-app.use('/', function (req, res) {
-  res.end('Hello, World!');
-});
- 
+
 /* create */
 
 app.locals.title = 'WatchDogZZ Web service';
